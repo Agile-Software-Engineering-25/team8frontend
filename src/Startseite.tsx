@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import type { FormEvent } from 'react';
 
 // Ein einfacher Style, der direkt in der Komponente definiert wird.
@@ -33,9 +33,8 @@ const styles = {
   label: {
     marginBottom: '5px',
     fontWeight: 'bold' as 'bold',
-  }
+  },
 };
-
 
 // Die eigentliche LoginForm Komponente
 const LoginForm: React.FC = () => {
@@ -61,8 +60,10 @@ const LoginForm: React.FC = () => {
   return (
     <form onSubmit={handleSubmit} style={styles.container}>
       <h2>Login</h2>
-      
-      <label htmlFor="email" style={styles.label}>E-Mail</label>
+
+      <label htmlFor="email" style={styles.label}>
+        E-Mail
+      </label>
       <input
         type="email"
         id="email"
@@ -72,7 +73,9 @@ const LoginForm: React.FC = () => {
         required // Stellt sicher, dass das Feld ausgefüllt werden muss
       />
 
-      <label htmlFor="password" style={styles.label}>Passwort</label>
+      <label htmlFor="password" style={styles.label}>
+        Passwort
+      </label>
       <input
         type="password"
         id="password"
