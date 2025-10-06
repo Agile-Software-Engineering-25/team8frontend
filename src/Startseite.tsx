@@ -79,7 +79,7 @@ export const Startseite: React.FC = () => {
         .includes(searchTerm.toLowerCase());
       const matchesFilter =
         filter === 'all' ||
-        (filter === 'custom' && role.standardRole === '') ||
+        (role.standardRole === '') ||
         role.standardRole === filter;
       return matchesSearch && matchesFilter;
     });
@@ -101,7 +101,6 @@ export const Startseite: React.FC = () => {
           onChange={(e) => setFilter(e.target.value)}
         >
           <option value="all">Alle Rollen</option>
-          <option value="custom">Eigene Rollen</option>
           {standardRoleTypes.map((roleType) => (
             <option key={roleType} value={roleType}>
               {roleType}
