@@ -34,13 +34,18 @@ export const RoleCard: React.FC<RoleCardProps> = ({ role }) => {
   const isCustomRole = role.standardRole === '';
 
   return (
+    // Die Haupt-Div der Karte
     <div className="role-card">
+      {/* NEU: Das Icon ist jetzt ein direktes Kind der Karte für die Positionierung */}
+      <Link to={`/edit/${role.id}`} className="edit-icon">
+        <EditIcon />
+      </Link>
+      
+      {/* Der Header enthält jetzt nur noch den Namen */}
       <div className="card-header">
         <h3 className="role-name">{role.name}</h3>
-        <Link to={`/edit/${role.id}`} className="edit-icon">
-          <EditIcon />
-        </Link>
       </div>
+
       <div className="card-content">
         <span className={`role-badge ${isCustomRole ? 'custom' : 'default'}`}>
           {isCustomRole ? 'Eigene Rolle' : role.standardRole}
