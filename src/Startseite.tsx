@@ -10,10 +10,10 @@ const fetchRolesFromBackend = (): Promise<UserRole[]> => {
   console.log("Rufe Rollen vom Backend ab...");
   const mockRoles: UserRole[] = [
     { id: 1, name: 'Globaler Administrator', standardRole: 'Administrator', userCount: 5 },
-    { id: 2, name: 'Marketing Team', standardRole: '', userCount: 12 },
+    { id: 2, name: 'Marketing Team', standardRole: 'PR', userCount: 12 },
     { id: 3, name: 'Informatik Gruppe F-3', standardRole: 'Student', userCount: 25 },
     { id: 4, name: 'Alle Dozenten', standardRole: 'Dozent', userCount: 50 },
-    { id: 5, name: 'Werkstudenten IT', standardRole: '', userCount: 8 },
+    { id: 5, name: 'Werkstudenten IT', standardRole: 'Student', userCount: 8 },
     { id: 6, name: 'Informatik Gruppe F-2', standardRole: 'Student', userCount: 31 },
   ];
 
