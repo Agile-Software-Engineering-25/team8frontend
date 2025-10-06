@@ -1,4 +1,3 @@
-// src/Startseite.tsx
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { RoleCard } from '../components/RoleCard';
