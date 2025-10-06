@@ -1,11 +1,11 @@
+// src/main.tsx
+
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './Startseite.tsx';
+import { Startseite } from './Startseite.tsx';
 
-const rootElement = document.getElementById('root')!;
-
-ReactDOM.createRoot(rootElement).render(
+ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <App />
+    <Startseite />
   </React.StrictMode>
 );
