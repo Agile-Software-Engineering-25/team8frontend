@@ -25,7 +25,7 @@ const fetchUsers = async (): Promise<User[]> => {
 const roleFrom = (u: User) => `${u.defaultRole}`;
 const roleCurr = (u: User) => `${u.currentRole}`;
 
-const BenutzerRollenHinzufuegen: React.FC = () => {
+export const BenutzerRollenHinzufuegen: React.FC = () => {
   const navigate = useNavigate();
 
   const [allUsers, setAllUsers] = useState<User[]>([]);
@@ -193,5 +193,5 @@ const BenutzerRollenHinzufuegen: React.FC = () => {
     </div>
   );
 };
-
 export default BenutzerRollenHinzufuegen;
+
