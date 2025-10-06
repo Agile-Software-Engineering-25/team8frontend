@@ -1,5 +1,3 @@
-/* src/EditRolePage.css */
-
 .edit-page-container {
   padding: 2rem;
   max-width: 1200px;
@@ -15,24 +13,31 @@
   padding-bottom: 1.5rem;
 }
 
-.back-link {
-  font-size: 1.2rem;
-  text-decoration: none;
-  color: #007bff;
-}
-
-.edit-page-header h1 {
-  margin: 0;
-  font-size: 1.8rem;
+.header-title-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
   flex-grow: 1;
 }
 
+.back-link {
+  font-size: 1rem;
+  text-decoration: none;
+  color: #007bff;
+  white-space: nowrap;
+}
+
+.header-title-group h1 {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
 .role-name-input {
-  padding: 0.75rem;
+  padding: 0.6rem;
   border: 1px solid #ccc;
   border-radius: 8px;
-  font-size: 1.2rem;
-  min-width: 300px;
+  font-size: 1rem;
+  min-width: 250px;
 }
 
 .permission-columns {
@@ -45,6 +50,8 @@
   background-color: #f9f9f9;
   border-radius: 8px;
   padding: 1rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .permission-column h2 {
@@ -59,7 +66,7 @@
   border: 1px solid #ddd;
   border-radius: 6px;
   margin-bottom: 1rem;
-  box-sizing: border-box; /* Wichtig, damit Padding die Breite nicht sprengt */
+  box-sizing: border-box;
 }
 
 .permission-list {
@@ -70,6 +77,7 @@
   min-height: 400px;
   max-height: 60vh;
   overflow-y: auto;
+  flex-grow: 1;
 }
 
 .permission-item {
@@ -80,7 +88,7 @@
   margin-bottom: 0.5rem;
   box-shadow: 0 1px 2px rgba(0,0,0,0.05);
   cursor: grab;
-  user-select: none; /* Verhindert das Markieren von Text beim Ziehen */
+  user-select: none;
 }
 
 .permission-item:hover {
