@@ -79,7 +79,7 @@ export const Startseite: React.FC = () => {
         .includes(searchTerm.toLowerCase());
       const matchesFilter =
         filter === 'all' ||
-        (role.standardRole === '') ||
+        role.standardRole === '' ||
         role.standardRole === filter;
       return matchesSearch && matchesFilter;
     });

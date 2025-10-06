@@ -10,7 +10,7 @@ interface Permission {
 }
 
 const fetchAllPermissions = async (): Promise<Permission[]> => {
-  console.log("Lade alle verfügbaren Berechtigungen...");
+  console.log('Lade alle verfügbaren Berechtigungen...');
   const allPermissions: Permission[] = [
     { id: 'perm-1', name: 'Benutzer erstellen' },
     { id: 'perm-2', name: 'Benutzer löschen' },
@@ -21,7 +21,9 @@ const fetchAllPermissions = async (): Promise<Permission[]> => {
     { id: 'perm-7', name: 'Einstellungen ändern' },
     { id: 'perm-8', name: 'Berichte exportieren' },
   ];
-  return new Promise(resolve => setTimeout(() => resolve(allPermissions), 300));
+  return new Promise((resolve) =>
+    setTimeout(() => resolve(allPermissions), 300)
+  );
 };
 
 const fetchRoleDetails = async (roleId: string) => {
@@ -31,17 +33,28 @@ const fetchRoleDetails = async (roleId: string) => {
     name: `Informatik Gruppe F-${roleId}`,
     assignedPermissionIds: ['perm-3', 'perm-4', 'perm-6'],
   };
-  return new Promise<{ id: number; name: string; assignedPermissionIds: string[] }>(resolve =>
-    setTimeout(() => resolve(mockRole), 500)
-  );
+  return new Promise<{
+    id: number;
+    name: string;
+    assignedPermissionIds: string[];
+  }>((resolve) => setTimeout(() => resolve(mockRole), 500));
 };
 
-
 const ArrowLeftIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-      <line x1="19" y1="12" x2="5" y2="12"></line>
-      <polyline points="12 19 5 12 12 5"></polyline>
-    </svg>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <line x1="19" y1="12" x2="5" y2="12"></line>
+    <polyline points="12 19 5 12 12 5"></polyline>
+  </svg>
 );
 
 export const EditRolePage: React.FC = () => {
@@ -63,8 +76,12 @@ export const EditRolePage: React.FC = () => {
       ]);
 
       setRoleName(roleDetails.name);
-      const assignedPerms = allPermissions.filter(p => roleDetails.assignedPermissionIds.includes(p.id));
-      const availablePerms = allPermissions.filter(p => !roleDetails.assignedPermissionIds.includes(p.id));
+      const assignedPerms = allPermissions.filter((p) =>
+        roleDetails.assignedPermissionIds.includes(p.id)
+      );
+      const availablePerms = allPermissions.filter(
+        (p) => !roleDetails.assignedPermissionIds.includes(p.id)
+      );
       setAssigned(assignedPerms);
       setAvailable(availablePerms);
       setLoading(false);
@@ -76,8 +93,10 @@ export const EditRolePage: React.FC = () => {
     const { source, destination } = result;
     if (!destination) return;
 
-    const sourceList = source.droppableId === 'assigned' ? [...assigned] : [...available];
-    const destList = destination.droppableId === 'assigned' ? [...assigned] : [...available];
+    const sourceList =
+      source.droppableId === 'assigned' ? [...assigned] : [...available];
+    const destList =
+      destination.droppableId === 'assigned' ? [...assigned] : [...available];
     const [movedItem] = sourceList.splice(source.index, 1);
 
     if (source.droppableId === destination.droppableId) {
@@ -102,27 +121,63 @@ export const EditRolePage: React.FC = () => {
     <div className="edit-page-container">
       <div className="edit-page-header">
         <div className="header-title-group">
-          <Link to="/" className="back-link"><ArrowLeftIcon /></Link>
+          <Link to="/" className="back-link">
+            <ArrowLeftIcon />
+          </Link>
           <h1>Rolle bearbeiten</h1>
         </div>
-        <input type="text" value={roleName} onChange={(e) => setRoleName(e.target.value)} className="role-name-input" />
+        <input
+          type="text"
+          value={roleName}
+          onChange={(e) => setRoleName(e.target.value)}
+          className="role-name-input"
+        />
         <button className="btn btn-primary">Änderungen speichern</button>
       </div>
 
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="permission-columns">
           <div className="permission-column">
-            <h2>Zugewiesene Berechtigungen ({assigned.filter(p => p.name.toLowerCase().includes(assignedSearch.toLowerCase())).length})</h2>
-            <input type="text" placeholder="Suchen..." className="search-list-input" value={assignedSearch} onChange={e => setAssignedSearch(e.target.value)} />
+            <h2>
+              Zugewiesene Berechtigungen (
+              {
+                assigned.filter((p) =>
+                  p.name.toLowerCase().includes(assignedSearch.toLowerCase())
+                ).length
+              }
+              )
+            </h2>
+            <input
+              type="text"
+              placeholder="Suchen..."
+              className="search-list-input"
+              value={assignedSearch}
+              onChange={(e) => setAssignedSearch(e.target.value)}
+            />
             <Droppable droppableId="assigned">
               {(provided) => (
-                <div {...provided.droppableProps} ref={provided.innerRef} className="permission-list">
+                <div
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                  className="permission-list"
+                >
                   {assigned.map((perm, index) => {
-                    const shouldShow = perm.name.toLowerCase().includes(assignedSearch.toLowerCase());
+                    const shouldShow = perm.name
+                      .toLowerCase()
+                      .includes(assignedSearch.toLowerCase());
                     return shouldShow ? (
-                      <Draggable key={perm.id} draggableId={perm.id} index={index}>
+                      <Draggable
+                        key={perm.id}
+                        draggableId={perm.id}
+                        index={index}
+                      >
                         {(provided) => (
-                          <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className="permission-item">
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            className="permission-item"
+                          >
                             {perm.name}
                           </div>
                         )}
@@ -135,17 +190,46 @@ export const EditRolePage: React.FC = () => {
             </Droppable>
           </div>
           <div className="permission-column">
-            <h2>Verfügbare Berechtigungen ({available.filter(p => p.name.toLowerCase().includes(availableSearch.toLowerCase())).length})</h2>
-            <input type="text" placeholder="Suchen..." className="search-list-input" value={availableSearch} onChange={e => setAvailableSearch(e.target.value)} />
+            <h2>
+              Verfügbare Berechtigungen (
+              {
+                available.filter((p) =>
+                  p.name.toLowerCase().includes(availableSearch.toLowerCase())
+                ).length
+              }
+              )
+            </h2>
+            <input
+              type="text"
+              placeholder="Suchen..."
+              className="search-list-input"
+              value={availableSearch}
+              onChange={(e) => setAvailableSearch(e.target.value)}
+            />
             <Droppable droppableId="available">
               {(provided) => (
-                <div {...provided.droppableProps} ref={provided.innerRef} className="permission-list">
+                <div
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                  className="permission-list"
+                >
                   {available.map((perm, index) => {
-                    const shouldShow = perm.name.toLowerCase().includes(availableSearch.toLowerCase());
+                    const shouldShow = perm.name
+                      .toLowerCase()
+                      .includes(availableSearch.toLowerCase());
                     return shouldShow ? (
-                      <Draggable key={perm.id} draggableId={perm.id} index={index}>
+                      <Draggable
+                        key={perm.id}
+                        draggableId={perm.id}
+                        index={index}
+                      >
                         {(provided) => (
-                          <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className="permission-item">
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            className="permission-item"
+                          >
                             {perm.name}
                           </div>
                         )}
