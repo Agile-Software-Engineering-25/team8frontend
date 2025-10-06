@@ -74,6 +74,26 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  position: relative;
+}
+
+.card-header {
+  margin-bottom: 0.5rem;
+}
+
+.edit-icon {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  color: #888;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 4px;
+}
+
+.edit-icon:hover {
+  color: #000;
+  background-color: #f0f0f0;
 }
 
 .role-name {
