@@ -1,95 +1,90 @@
-import React, { useState } from 'react';
-import type { FormEvent } from 'react';
+// src/Startseite.tsx
 
-// Ein einfacher Style, der direkt in der Komponente definiert wird.
-// Für größere Projekte würde man dies in eine separate CSS-Datei auslagern.
-const styles = {
-  container: {
-    display: 'flex',
-    flexDirection: 'column' as 'column', // TypeScript benötigt hier eine Typ-Zusicherung
-    width: '300px',
-    margin: '50px auto',
-    padding: '20px',
-    border: '1px solid #ccc',
-    borderRadius: '8px',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-  },
-  input: {
-    padding: '10px',
-    marginBottom: '15px',
-    border: '1px solid #ddd',
-    borderRadius: '4px',
-    fontSize: '16px',
-  },
-  button: {
-    padding: '10px 15px',
-    border: 'none',
-    borderRadius: '4px',
-    backgroundColor: '#007bff',
-    color: 'white',
-    fontSize: '16px',
-    cursor: 'pointer',
-  },
-  label: {
-    marginBottom: '5px',
-    fontWeight: 'bold' as 'bold',
-  },
-};
+import React, { useState, useMemo } from 'react';
+import { RoleCard } from '../components/RoleCard';
+import type { UserRole } from '../components/RoleCard';
+import './Startseite.css'; 
 
-// Die eigentliche LoginForm Komponente
-const LoginForm: React.FC = () => {
-  // State-Variablen für E-Mail und Passwort mit dem useState-Hook
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+// ANPASSUNG: Weitere Rolle hinzugefügt, um die Filterung zu demonstrieren
+const initialRoles: UserRole[] = [
+  { id: 1, name: 'Globaler Administrator', standardRole: 'Administrator', userCount: 5 },
+  { id: 2, name: 'Marketing Team', standardRole: '', userCount: 12 },
+  { id: 3, name: 'Informatik Gruppe F-3', standardRole: 'Student', userCount: 25 },
+  { id: 4, name: 'Alle Dozenten', standardRole: 'Dozent', userCount: 50 },
+  { id: 5, name: 'Werkstudenten IT', standardRole: '', userCount: 8 },
+  { id: 6, name: 'Informatik Gruppe F-2', standardRole: 'Student', userCount: 31 },
+];
 
-  // Funktion, die beim Absenden des Formulars aufgerufen wird
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    // Verhindert das Standardverhalten des Formulars (Seiten-Neuladen)
-    event.preventDefault();
+export const Startseite: React.FC = () => {
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  // Der 'filter' state speichert jetzt direkt den Namen der Standardrolle
+  const [filter, setFilter] = useState<string>('all'); 
 
-    // Hier würdest du normalerweise die Logik zur Authentifizierung einfügen
-    // (z.B. einen API-Aufruf an dein Backend)
-    console.log('Login-Daten:', { email, password });
-    alert(`Login-Versuch mit E-Mail: ${email}`);
+  // ANPASSUNG: Einzigartige Standardrollen dynamisch aus den Daten ermitteln
+  const standardRoleTypes = useMemo(() => {
+    // Erstellt ein Set, um doppelte Einträge automatisch zu entfernen
+    const uniqueRoles = new Set(
+      initialRoles
+        .map(role => role.standardRole) // Nur die 'standardRole' Eigenschaft extrahieren
+        .filter(roleName => roleName !== '') // Leere Einträge (eigene Rollen) herausfiltern
+    );
+    // Wandelt das Set zurück in ein Array um, damit wir darüber mappen können
+    return Array.from(uniqueRoles); 
+  }, []); // Dieses Array muss nur einmal beim ersten Rendern erstellt werden
 
-    // Optional: Felder nach dem Absenden zurücksetzen
-    setEmail('');
-    setPassword('');
-  };
+  const filteredRoles = useMemo(() => {
+    return initialRoles.filter(role => {
+      const matchesSearch = role.name.toLowerCase().includes(searchTerm.toLowerCase());
+      
+      // ANPASSUNG: Die Filter-Logik wurde erweitert
+      const matchesFilter = 
+        filter === 'all' || // "Alle" anzeigen
+        (filter === 'custom' && role.standardRole === '') || // Nur "Eigene Rollen" anzeigen
+        (role.standardRole === filter); // Nur Rollen anzeigen, deren Standardrolle dem Filter entspricht
+        
+      return matchesSearch && matchesFilter;
+    });
+  }, [searchTerm, filter]);
 
   return (
-    <form onSubmit={handleSubmit} style={styles.container}>
-      <h2>Login</h2>
+    <div className="homepage-container">
+      <header className="toolbar">
+        <input
+          type="text"
+          placeholder="Suchen..."
+          className="search-input"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <select 
+          className="filter-select" 
+          value={filter} 
+          onChange={(e) => setFilter(e.target.value)}
+        >
+          {/* Statische Optionen */}
+          <option value="all">Alle Rollen</option>
+          <option value="custom">Eigene Rollen</option>
+          
+          {/* ANPASSUNG: Dynamische Optionen basierend auf den Daten */}
+          {standardRoleTypes.map(roleType => (
+            <option key={roleType} value={roleType}>
+              {roleType}
+            </option>
+          ))}
+        </select>
+        <button className="btn btn-primary">Benutzerrolle erstellen</button>
+        <button className="btn btn-secondary">Benutzer Rollen hinzufügen</button>
+      </header>
 
-      <label htmlFor="email" style={styles.label}>
-        E-Mail
-      </label>
-      <input
-        type="email"
-        id="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        style={styles.input}
-        required // Stellt sicher, dass das Feld ausgefüllt werden muss
-      />
-
-      <label htmlFor="password" style={styles.label}>
-        Passwort
-      </label>
-      <input
-        type="password"
-        id="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        style={styles.input}
-        required
-      />
-
-      <button type="submit" style={styles.button}>
-        Anmelden
-      </button>
-    </form>
+      <main className="roles-list">
+        {filteredRoles.length > 0 ? (
+          filteredRoles.map(role => (
+            <RoleCard key={role.id} role={role} />
+          ))
+        ) : (
+          <p>Keine Rollen gefunden.</p>
+        )}
+      </main>
+    </div>
   );
 };
-
-export default LoginForm;
