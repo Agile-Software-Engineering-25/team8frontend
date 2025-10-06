@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import { Startseite } from './Startseite.tsx';
 import { EditRolePage } from './edit/RolleEditieren.tsx';
+import BenutzerRollenHinzufuegen from "./BenutzerRollenHinzufuegen";
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <BrowserRouter>

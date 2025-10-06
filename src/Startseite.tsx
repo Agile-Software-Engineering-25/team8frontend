@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { RoleCard } from '../components/RoleCard';
 import type { UserRole } from '../components/RoleCard';
 import './Startseite.css';
+import { useNavigate } from "react-router-dom";
 
 const fetchRolesFromBackend = (): Promise<UserRole[]> => {
   console.log('Rufe Rollen vom Backend ab...');
@@ -44,6 +45,8 @@ export const Startseite: React.FC = () => {
 
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [filter, setFilter] = useState<string>('all');
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadRoles = async () => {
@@ -108,7 +111,10 @@ export const Startseite: React.FC = () => {
           ))}
         </select>
         <button className="btn btn-primary">Benutzerrolle erstellen</button>
-        <button className="btn btn-secondary">
+        <button
+          className="btn btn-secondary"
+          onClick={() => navigate('/benutzer-rollen-hinzufuegen')}
+        >
           Benutzer Rollen hinzufügen
         </button>
       </header>
