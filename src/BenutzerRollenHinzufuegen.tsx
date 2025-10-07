@@ -2,6 +2,9 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./BenutzerRollenHinzufuegen.css";
 
+// --- Rollen: fest definierte Beispiele laut Vorgabe ---
+const ROLE_OPTIONS = ["Administrator", "PR", "Dozent", "Student"] as const;
+
 // --- Mock: später durch echten API-Call ersetzen ---
 type User = {
   id: string;
@@ -13,10 +16,10 @@ type User = {
 
 const fetchUsers = async (): Promise<User[]> => {
   const mock: User[] = [
-    { id: "1", firstName: "Mia",   lastName: "Schneider", defaultRole: "User",    currentRole: "User" },
-    { id: "2", firstName: "Lukas", lastName: "Weber",     defaultRole: "User",    currentRole: "Admin" },
-    { id: "3", firstName: "Emma",  lastName: "Hoffmann",  defaultRole: "Manager", currentRole: "Manager" },
-    { id: "4", firstName: "Jonas", lastName: "Wagner",    defaultRole: "User",    currentRole: "User" },
+    { id: "1", firstName: "Mia",   lastName: "Schneider", defaultRole: "Student",       currentRole: "Student" },
+    { id: "2", firstName: "Lukas", lastName: "Weber",     defaultRole: "Student",       currentRole: "Administrator" },
+    { id: "3", firstName: "Emma",  lastName: "Hoffmann",  defaultRole: "Dozent",        currentRole: "Dozent" },
+    { id: "4", firstName: "Jonas", lastName: "Wagner",    defaultRole: "PR",            currentRole: "Student" },
   ];
   return new Promise((res) => setTimeout(() => res(mock), 150));
 };
@@ -52,10 +55,8 @@ export const BenutzerRollenHinzufuegen: React.FC = () => {
     })();
   }, []);
 
-  const roleOptions = useMemo(() => {
-    const s = new Set(allUsers.map((u) => u.defaultRole).filter(Boolean));
-    return Array.from(s);
-  }, [allUsers]);
+  // Dropdown-Optionen: direkt die festen Rollen aus der Vorgabe
+  const roleOptions = useMemo(() => ROLE_OPTIONS, []);
 
   const filtered = useMemo(() => {
     const nameNeedle = qName.trim().toLowerCase();
@@ -110,7 +111,7 @@ export const BenutzerRollenHinzufuegen: React.FC = () => {
           value={qName}
           onChange={(e) => setQName(e.target.value)}
         />
-        {/* Rollen-Suche (Dropdown angelehnt an Startseite) */}
+        {/* Rollen-Filter (Dropdown mit festen Optionen) */}
         <select
           className="filter-select"
           value={qRole}
@@ -143,7 +144,7 @@ export const BenutzerRollenHinzufuegen: React.FC = () => {
             <div className="assign-cell">Aktuelle Rolle</div>
           </div>
 
-          {/* Table-Body */}
+        {/* Table-Body */}
           {loading && <div className="assign-row muted">Lade Benutzer…</div>}
           {err && <div className="assign-row error">{err}</div>}
           {!loading && !err && filtered.length === 0 && (
@@ -194,4 +195,3 @@ export const BenutzerRollenHinzufuegen: React.FC = () => {
   );
 };
 export default BenutzerRollenHinzufuegen;
-
