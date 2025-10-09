@@ -1,0 +1,74 @@
+
+   .assign-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .assign-toolbar {
+    margin-bottom: 1rem;
+  }
+  
+  .assign-main {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  /* „Tabellen“-Layout mit flex, damit’s simpel bleibt */
+  .assign-table {
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    overflow: hidden;
+  }
+  
+  .assign-row {
+    display: grid;
+    grid-template-columns: 48px 1fr 1fr 1fr 1fr;
+    gap: 0;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #f1f3f5;
+  }
+  
+  .assign-row:last-child {
+    border-bottom: none;
+  }
+  
+  .assign-thead {
+    background: #fafbfc;
+    font-weight: 600;
+  }
+  
+  .assign-cell.checkbox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .assign-row.muted {
+    color: #6c757d;
+  }
+  
+  .assign-row.error {
+    color: #b00020;
+  }
+  
+  /* „Pill“-Leiste */
+  .assign-pill {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 999px;
+    padding: 0.5rem 0.75rem;
+  }
+  
+  /* Footer-Aktionen rechtsbündig */
+  .assign-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+  }
+  
