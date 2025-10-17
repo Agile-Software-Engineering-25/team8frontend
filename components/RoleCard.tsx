@@ -52,7 +52,8 @@ export const RoleCard: React.FC<RoleCardProps> = ({ role }) => {
         </span>
         <p className="user-count">Anzahl Personen: {role.userCount}</p>
       </div>
-      <button className="btn btn-view-users">Benutzer Anzeigen</button>
+      <button className="btn btn-view-users">Benutzer dieser Standardrolle Anzeigen</button>
+      <button className="btn btn-view-users">Benutzer dieser Rolle Hinzufügen</button>
     </div>
   );
 };
