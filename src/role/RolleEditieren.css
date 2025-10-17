@@ -1,0 +1,154 @@
+/* --- Globale Seitenstruktur --- */
+.edit-page-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+/* --- Header-Layout --- */
+.edit-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 20px;
+}
+
+/* Linke Seite: Zurück-Pfeil und Titel */
+.header-title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-title-group h1 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.back-link {
+  color: #333;
+  display: grid;
+  place-items: center;
+  padding: 4px;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.back-link:hover {
+  background-color: #f0f0f0;
+}
+
+/* Rechte Seite: Aktionen (Dropdown, Input, Button) */
+.header-actions {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px; /* Abstand zwischen den Elementen */
+}
+
+/* Label und Select-Box zu einem horizontalen Block */
+.standard-role-selector {
+  display: flex;
+  align-items: center; /* Vertikal zentrieren (Label neben Select) */
+  gap: 8px; /* Kleinerer Abstand zwischen Label und Select */
+}
+
+.standard-role-selector label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #333;
+  white-space: nowrap; /* Verhindert Zeilenumbruch im Label */
+}
+
+/* --- Vereinheitlichung der Formular-Elemente im Header --- */
+
+/* 1. Gemeinsame Höhe für alle Aktionselemente */
+.standard-role-selector select,
+.role-name-input,
+.btn.btn-primary,
+button.btn-primary {
+  height: 40px;
+  box-sizing: border-box;
+}
+
+/* 2. Gemeinsame Stile für Input-Felder (select und input) */
+.standard-role-selector select,
+.role-name-input {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: white;
+}
+
+/* 3. Spezifische Stile, die sich unterscheiden */
+.standard-role-selector select {
+  min-width: 180px;
+}
+
+.role-name-input {
+  min-width: 200px;
+}
+
+.btn.btn-primary,
+button.btn-primary {
+  padding: 8px 16px;
+  /* (restliches Button-Styling aus deiner globalen CSS) */
+}
+
+/* --- Spalten-Layout (Drag & Drop) --- */
+.permission-columns {
+  display: flex;
+  gap: 24px;
+}
+
+.permission-column {
+  flex: 1;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.permission-column h2 {
+  font-size: 1.1rem;
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+/* Such-Input *innerhalb* der Spalten */
+.search-list-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  box-sizing: border-box;
+}
+
+.permission-list {
+  min-height: 300px;
+  background-color: #fff;
+  border: 1px dashed #ddd;
+  border-radius: 6px;
+  padding: 8px;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.permission-item {
+  background-color: #fff;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.2s;
+}
+
+.permission-item:hover {
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+}

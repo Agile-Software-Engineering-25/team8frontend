@@ -1,0 +1,19 @@
+body {
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
+    Arial, sans-serif;
+  background-color: #f4f7f9;
+  padding: 2rem;
+}
+
+/* NEUE REGEL HINZUFÜGEN:
+  Erzwingt, dass Formularelemente die body-Schriftart erben.
+*/
+button,
+input,
+select,
+textarea {
+  font-family: inherit; /* Erbt die Schriftart vom 'body' */
+  font-size: 100%; /* Stellt sicher, dass die Schriftgröße passt */
+  margin: 0; /* Entfernt Standard-Abstände */
+}
