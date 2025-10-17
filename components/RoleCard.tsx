@@ -37,7 +37,7 @@ export const RoleCard: React.FC<RoleCardProps> = ({ role }) => {
     // Die Haupt-Div der Karte
     <div className="role-card">
       {/* NEU: Das Icon ist jetzt ein direktes Kind der Karte für die Positionierung */}
-      <Link to={`/edit/${role.id}`} className="edit-icon">
+      <Link to={`/role/${role.id}`} className="edit-icon">
         <EditIcon />
       </Link>
       

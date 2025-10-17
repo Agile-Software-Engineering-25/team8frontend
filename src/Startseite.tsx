@@ -1,4 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
+// HIER: 'useNavigate' importieren statt 'Link'
+import { useNavigate } from 'react-router-dom';
 import { RoleCard } from '../components/RoleCard';
 import type { UserRole } from '../components/RoleCard';
 import './Startseite.css';
@@ -38,12 +40,13 @@ const fetchRolesFromBackend = (): Promise<UserRole[]> => {
 
 export const Startseite: React.FC = () => {
   const [roles, setRoles] = useState<UserRole[]>([]);
-
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [filter, setFilter] = useState<string>('all');
+
+  // HIER: Hook initialisieren
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadRoles = async () => {
@@ -85,6 +88,11 @@ export const Startseite: React.FC = () => {
     });
   }, [searchTerm, filter, roles]);
 
+  // HIER: Handler-Funktion für den Klick
+  const handleCreateNewRole = () => {
+    navigate('/role/new');
+  };
+
   return (
     <div className="homepage-container">
       <header className="toolbar">
@@ -107,7 +115,10 @@ export const Startseite: React.FC = () => {
             </option>
           ))}
         </select>
-        <button className="btn btn-primary">Benutzerrolle erstellen</button>
+        
+        <button onClick={handleCreateNewRole} className="btn btn-primary">
+          Benutzerrolle erstellen
+        </button>
       </header>
 
       <main className="roles-list">
