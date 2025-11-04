@@ -33,10 +33,15 @@ export const RoleCard: React.FC<RoleCardProps> = ({ role }) => {
   const isCustomRole = role.standardRole === '';
   const navigate = useNavigate();
 
-  const handleViewUsers = () => {
-    // Navigation zur Unterseite mit der ID der Standardrolle
+  const handleViewBaseUsers = () => {
     navigate(`/base-role/${role.id}`, {
       state: { standardRole: role.standardRole, roleName: role.name },
+    });
+  };
+
+  const handleViewRoleUsers = () => {
+    navigate(`/role-users/${role.id}`, {
+      state: { roleName: role.name },
     });
   };
 
@@ -57,12 +62,12 @@ export const RoleCard: React.FC<RoleCardProps> = ({ role }) => {
         <p className="user-count">Anzahl Personen: {role.userCount}</p>
       </div>
 
-      <button className="btn btn-view-users" onClick={handleViewUsers}>
+      <button className="btn btn-view-users" onClick={handleViewBaseUsers}>
         Benutzer dieser Standardrolle anzeigen
       </button>
 
-      <button className="btn btn-view-users">
-        Benutzer dieser Rolle hinzufügen
+      <button className="btn btn-view-users" onClick={handleViewRoleUsers}>
+        Benutzer dieser Rolle anzeigen
       </button>
     </div>
   );
