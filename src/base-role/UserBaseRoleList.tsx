@@ -96,7 +96,8 @@ const getAllUsersByStandardRole = async (
 export const UserBaseRoleList: React.FC = () => {
   const { baseRoleId } = useParams<{ baseRoleId: string }>();
   const location = useLocation();
-  const standardRole = (location.state as any)?.standardRole ?? 'Unbekannt';
+  const standardRole =
+    (location.state as { standardRole?: string })?.standardRole ?? 'Unbekannt';
 
   const [users, setUsers] = useState<UserSummary[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -108,7 +109,7 @@ export const UserBaseRoleList: React.FC = () => {
         setIsLoading(true);
         const data = await getAllUsersByStandardRole(baseRoleId ?? '');
         setUsers(data);
-      } catch (e) {
+      } catch {
         setError('Fehler beim Laden der Benutzer.');
       } finally {
         setIsLoading(false);
