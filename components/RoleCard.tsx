@@ -62,7 +62,7 @@ export const RoleCard: React.FC<RoleCardProps> = ({ role }) => {
       </button>
 
       <button className="btn btn-view-users">
-        Benutzer dieser Rolle hinzufügen
+        Benutzer dieser Rolle anzeigen
       </button>
     </div>
   );
