@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -40,7 +39,7 @@ export const RoleCard: React.FC<RoleCardProps> = ({ role }) => {
       <Link to={`/role/${role.id}`} className="edit-icon">
         <EditIcon />
       </Link>
-      
+
       {/* Der Header enthält jetzt nur noch den Namen */}
       <div className="card-header">
         <h3 className="role-name">{role.name}</h3>
@@ -52,8 +51,12 @@ export const RoleCard: React.FC<RoleCardProps> = ({ role }) => {
         </span>
         <p className="user-count">Anzahl Personen: {role.userCount}</p>
       </div>
-      <button className="btn btn-view-users">Benutzer dieser Standardrolle Anzeigen</button>
-      <button className="btn btn-view-users">Benutzer dieser Rolle Hinzufügen</button>
+      <button className="btn btn-view-users">
+        Benutzer dieser Standardrolle Anzeigen
+      </button>
+      <button className="btn btn-view-users">
+        Benutzer dieser Rolle Hinzufügen
+      </button>
     </div>
   );
 };
