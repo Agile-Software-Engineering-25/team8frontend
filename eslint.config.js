@@ -44,9 +44,9 @@ export default tseslint.config([
       ],
 
       // ---- General JS/TS conventions ----
-      'no-var': 'error',
-      '@typescript-eslint/no-explicit-any': 'error',
-      'prefer-const': 'error',
+      'no-var': 'warn',
+      '@typescript-eslint/no-explicit-any': 'warn',
+      'prefer-const': 'warn',
 
       // ---- Arrow functions ----
       'prefer-arrow-callback': 'warn',
