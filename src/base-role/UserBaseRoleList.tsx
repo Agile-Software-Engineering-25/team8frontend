@@ -30,7 +30,9 @@ const ArrowLeftIcon = () => (
 );
 
 // --- MOCK / API FUNCTION ---
-const getAllUsersByStandardRole = async (baseRoleId: string): Promise<UserSummary[]> => {
+const getAllUsersByStandardRole = async (
+  baseRoleId: string
+): Promise<UserSummary[]> => {
   // const response = await fetch(`/api/base-role/${baseRoleId}/users`);
   // const data = await response.json();
   // return data;
@@ -39,15 +41,50 @@ const getAllUsersByStandardRole = async (baseRoleId: string): Promise<UserSummar
 
   const mockData: Record<string, UserSummary[]> = {
     '1': [
-      { id: '1', username: 'admin', email: 'admin@example.com', firstName: 'Sys', lastName: 'Admin', enabled: true },
-      { id: '2', username: 'root', email: 'root@example.com', firstName: 'Root', lastName: 'User', enabled: false },
+      {
+        id: '1',
+        username: 'admin',
+        email: 'admin@example.com',
+        firstName: 'Sys',
+        lastName: 'Admin',
+        enabled: true,
+      },
+      {
+        id: '2',
+        username: 'root',
+        email: 'root@example.com',
+        firstName: 'Root',
+        lastName: 'User',
+        enabled: false,
+      },
     ],
     '2': [
-      { id: '3', username: 'maria.pr', email: 'maria@example.com', firstName: 'Maria', lastName: 'PR', enabled: true },
+      {
+        id: '3',
+        username: 'maria.pr',
+        email: 'maria@example.com',
+        firstName: 'Maria',
+        lastName: 'PR',
+        enabled: true,
+      },
     ],
     '3': [
-      { id: '4', username: 'student1', email: 'student1@example.com', firstName: 'Max', lastName: 'Mustermann', enabled: true },
-      { id: '5', username: 'student2', email: 'student2@example.com', firstName: 'Anna', lastName: 'Schmidt', enabled: true },
+      {
+        id: '4',
+        username: 'student1',
+        email: 'student1@example.com',
+        firstName: 'Max',
+        lastName: 'Mustermann',
+        enabled: true,
+      },
+      {
+        id: '5',
+        username: 'student2',
+        email: 'student2@example.com',
+        firstName: 'Anna',
+        lastName: 'Schmidt',
+        enabled: true,
+      },
     ],
   };
 
@@ -55,7 +92,6 @@ const getAllUsersByStandardRole = async (baseRoleId: string): Promise<UserSummar
     setTimeout(() => resolve(mockData[baseRoleId] || []), 300);
   });
 };
-
 
 export const UserBaseRoleList: React.FC = () => {
   const { baseRoleId } = useParams<{ baseRoleId: string }>();
@@ -97,7 +133,9 @@ export const UserBaseRoleList: React.FC = () => {
       <section className="userlist-content">
         {isLoading && <p>Benutzer werden geladen...</p>}
         {error && <p className="error">{error}</p>}
-        {!isLoading && !error && users.length === 0 && <p>Keine Benutzer gefunden.</p>}
+        {!isLoading && !error && users.length === 0 && (
+          <p>Keine Benutzer gefunden.</p>
+        )}
 
         {!isLoading && !error && users.length > 0 && (
           <table className="userlist-table">
@@ -126,9 +164,8 @@ export const UserBaseRoleList: React.FC = () => {
   );
 };
 
-
 // In case enabled and id is of interest
-  /*            <tr>
+/*            <tr>
                 <th>ID</th>
                 <th>Username</th>
                 <th>E-Mail</th>
