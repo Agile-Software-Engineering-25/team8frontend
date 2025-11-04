@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export interface UserRole {
   id: number;
@@ -31,16 +31,21 @@ const EditIcon = () => (
 
 export const RoleCard: React.FC<RoleCardProps> = ({ role }) => {
   const isCustomRole = role.standardRole === '';
+  const navigate = useNavigate();
+
+  const handleViewUsers = () => {
+    // Navigation zur Unterseite mit der ID der Standardrolle
+    navigate(`/base-role/${role.id}`, {
+      state: { standardRole: role.standardRole, roleName: role.name },
+    });
+  };
 
   return (
-    // Die Haupt-Div der Karte
     <div className="role-card">
-      {/* NEU: Das Icon ist jetzt ein direktes Kind der Karte für die Positionierung */}
       <Link to={`/role/${role.id}`} className="edit-icon">
         <EditIcon />
       </Link>
 
-      {/* Der Header enthält jetzt nur noch den Namen */}
       <div className="card-header">
         <h3 className="role-name">{role.name}</h3>
       </div>
@@ -51,11 +56,13 @@ export const RoleCard: React.FC<RoleCardProps> = ({ role }) => {
         </span>
         <p className="user-count">Anzahl Personen: {role.userCount}</p>
       </div>
-      <button className="btn btn-view-users">
-        Benutzer dieser Standardrolle Anzeigen
+
+      <button className="btn btn-view-users" onClick={handleViewUsers}>
+        Benutzer dieser Standardrolle anzeigen
       </button>
+
       <button className="btn btn-view-users">
-        Benutzer dieser Rolle Hinzufügen
+        Benutzer dieser Rolle hinzufügen
       </button>
     </div>
   );

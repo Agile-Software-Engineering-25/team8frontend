@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import { Startseite } from './Startseite.tsx';
 import { EditRolePage } from './role/RolleEditieren.tsx';
+import { UserBaseRoleList } from './base-role/UserBaseRoleList.tsx';
+
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
@@ -10,6 +12,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <Routes>
       <Route path="/" element={<Startseite />} />
       <Route path="/role/:roleId" element={<EditRolePage />} />
+      <Route path="/base-role/:baseRoleId" element={<UserBaseRoleList />} />
     </Routes>
   </BrowserRouter>
 );
