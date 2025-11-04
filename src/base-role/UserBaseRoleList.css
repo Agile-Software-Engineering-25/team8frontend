@@ -1,0 +1,45 @@
+.userlist-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.userlist-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.userlist-title {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.userlist-content {
+  background: #fff;
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.userlist-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.userlist-table th,
+.userlist-table td {
+  text-align: left;
+  padding: 0.75rem 0.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+.userlist-table tbody tr:hover {
+  background-color: #f9f9f9;
+}
+
+.error {
+  color: #b00020;
+}
