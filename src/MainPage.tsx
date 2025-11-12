@@ -117,7 +117,7 @@ export const Startseite: React.FC = () => {
         </select>
 
         <button onClick={handleCreateNewGroup} className="btn btn-primary">
-          BenutzerGruppe erstellen
+          Benutzergruppe erstellen
         </button>
       </header>
 

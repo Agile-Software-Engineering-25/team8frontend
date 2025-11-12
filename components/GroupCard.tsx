@@ -67,7 +67,7 @@ export const GroupCard: React.FC<GroupCardProps> = ({ Group }) => {
       </button>
 
       <button className="btn btn-view-users" onClick={handleViewGroupUsers}>
-        Benutzer dieser gruppe anzeigen
+        Benutzer dieser Gruppe anzeigen
       </button>
     </div>
   );
