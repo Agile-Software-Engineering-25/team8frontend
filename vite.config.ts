@@ -9,6 +9,8 @@ const PORT = parseInt(process.env.PORT ?? '5173');
 
 const ENTRY_POINT = 'src/singleSpa.tsx';
 
+export const API_BASE_URL = 'http://localhost:8080/api/ase-08/';
+
 const NPM_EXTERNALS: string[] = [];
 
 // https://vite.dev/config/

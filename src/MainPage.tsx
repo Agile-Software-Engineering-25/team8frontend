@@ -1,13 +1,13 @@
 import React, { useState, useMemo, useEffect } from 'react';
-// HIER: 'useNavigate' importieren statt 'Link'
 import { useNavigate } from 'react-router-dom';
 import { GroupCard } from '../components/GroupCard';
 import type { UserGroup } from '../components/GroupCard';
+
 import './MainPage.css';
 
 const fetchGroupsFromBackend = async (): Promise<UserGroup[]> => {
   console.log('Rufe Gruppen vom Backend ab...');
-  const url = 'http://localhost:8080/api/ase-08/groups';
+  const url = `${window.API_BASE_URL}/groups`;
 
   try {
     const response = await fetch(url);
