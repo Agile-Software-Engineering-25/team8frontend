@@ -24,9 +24,7 @@ const fetchAllRoles = async (): Promise<Role[]> => {
     { id: 'role-7', name: 'Einstellungen ändern' },
     { id: 'role-8', name: 'Berichte exportieren' },
   ];
-  return new Promise((resolve) =>
-    setTimeout(() => resolve(allRoles), 300)
-  );
+  return new Promise((resolve) => setTimeout(() => resolve(allRoles), 300));
 };
 
 const fetchGroupDetails = async (groupId: string) => {
@@ -47,9 +45,7 @@ const addRoleToGroup = async (
   groupId: string,
   roleId: string
 ): Promise<void> => {
-  console.log(
-    `API CALL: Füge Rolle '${roleId}' zu Gruppe '${groupId}' hinzu.`
-  );
+  console.log(`API CALL: Füge Rolle '${roleId}' zu Gruppe '${groupId}' hinzu.`);
   return new Promise((resolve) => setTimeout(resolve, 400));
 };
 
@@ -57,9 +53,7 @@ const removeRoleFromGroup = async (
   groupId: string,
   roleId: string
 ): Promise<void> => {
-  console.log(
-    `API CALL: Entferne Rolle '${roleId}' von Gruppe '${groupId}'.`
-  );
+  console.log(`API CALL: Entferne Rolle '${roleId}' von Gruppe '${groupId}'.`);
   return new Promise((resolve) => setTimeout(resolve, 400));
 };
 
@@ -103,7 +97,12 @@ export const EditGroupPage: React.FC = () => {
 
   useEffect(() => {
     const loadData = async () => {
-      console.log("loadData() called with groupId =", groupId, "isNewGroup =", isNewGroup);
+      console.log(
+        'loadData() called with groupId =',
+        groupId,
+        'isNewGroup =',
+        isNewGroup
+      );
       setLoading(true);
       if (isNewGroup) {
         const [allRoles, standardGroupsData] = await Promise.all([

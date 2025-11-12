@@ -68,9 +68,9 @@ export const Startseite: React.FC = () => {
 
   const standardGroupTypes = useMemo(() => {
     const uniqueGroups = new Set(
-      Groups
-        .map((Group) => Group.standardGroup)
-        .filter((GroupName) => GroupName !== '')
+      Groups.map((Group) => Group.standardGroup).filter(
+        (GroupName) => GroupName !== ''
+      )
     );
     return Array.from(uniqueGroups);
   }, [Groups]);
@@ -127,7 +127,9 @@ export const Startseite: React.FC = () => {
         {!isLoading &&
           !error &&
           (filteredGroups.length > 0 ? (
-            filteredGroups.map((Group) => <GroupCard key={Group.id} Group={Group} />)
+            filteredGroups.map((Group) => (
+              <GroupCard key={Group.id} Group={Group} />
+            ))
           ) : (
             <p>Keine Gruppen gefunden.</p>
           ))}

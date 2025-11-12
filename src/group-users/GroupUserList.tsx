@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useLocation, Link } from 'react-router-dom';
-import './base.css'
+import './base.css';
 import { AddUserToGroupDialog } from './AddUserToGroupDialog';
 
 // --- ICONS ---
