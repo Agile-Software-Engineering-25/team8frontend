@@ -90,7 +90,7 @@ export const Startseite: React.FC = () => {
 
   // HIER: Handler-Funktion für den Klick
   const handleCreateNewGroup = () => {
-    navigate('/Group/new');
+    navigate('/group/new');
   };
 
   return (

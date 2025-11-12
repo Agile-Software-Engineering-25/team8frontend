@@ -103,9 +103,9 @@ export const EditGroupPage: React.FC = () => {
 
   useEffect(() => {
     const loadData = async () => {
+      console.log("loadData() called with groupId =", groupId, "isNewGroup =", isNewGroup);
       setLoading(true);
       if (isNewGroup) {
-        // Modus: Neue Gruppe erstellen
         const [allPermissions, standardGroupsData] = await Promise.all([
           fetchAllPermissions(),
           fetchStandardGroups(),
@@ -200,16 +200,16 @@ export const EditGroupPage: React.FC = () => {
         {/* --- Wrapper für die Aktionen rechts --- */}
         <div className="header-actions">
           {isNewGroup && (
-            <div className="standard-Group-selector">
-              <label htmlFor="standard-Group">StandardGruppe</label>
+            <div className="standard-group-selector">
+              <label htmlFor="standard-group">StandardGruppe</label>
               <select
-                id="standard-Group"
+                id="standard-group"
                 value={selectedStandardGroup}
                 onChange={(e) => setSelectedStandardGroup(e.target.value)}
               >
-                {standardGroups.map((Group) => (
-                  <option key={Group} value={Group}>
-                    {Group}
+                {standardGroups.map((group) => (
+                  <option key={group} value={group}>
+                    {group}
                   </option>
                 ))}
               </select>
@@ -220,7 +220,7 @@ export const EditGroupPage: React.FC = () => {
             value={GroupName}
             onChange={(e) => setGroupName(e.target.value)}
             placeholder={isNewGroup ? 'Name der neuen Gruppe' : ''}
-            className="Group-name-input"
+            className="group-name-input"
           />
           <button className="btn btn-primary">
             {isNewGroup ? 'Gruppe erstellen' : 'Änderungen speichern'}

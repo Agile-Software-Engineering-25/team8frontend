@@ -22,8 +22,8 @@ const ArrowLeftIcon = () => (
 );
 
 // --- MOCK / API ---
-const getAllUsersByGroup = async (GroupId: string) => {
-  console.log('Mock-API call → getAllUsersByGroup', GroupId);
+const getAllUsersByGroup = async (groupId: string) => {
+  console.log('Mock-API call → getAllUsersByGroup', groupId);
 
   const mockUsers = [
     {
@@ -50,7 +50,7 @@ const getAllUsersByGroup = async (GroupId: string) => {
 };
 
 export const GroupUserList: React.FC = () => {
-  const { GroupId } = useParams<{ GroupId: string }>();
+  const { groupId } = useParams<{ groupId: string }>();
   const location = useLocation();
   const GroupName =
     (location.state as { GroupName?: string })?.GroupName ?? 'Unbekannt';
@@ -65,7 +65,7 @@ export const GroupUserList: React.FC = () => {
     const loadUsers = async () => {
       try {
         setIsLoading(true);
-        const data = await getAllUsersByGroup(GroupId ?? '');
+        const data = await getAllUsersByGroup(groupId ?? '');
         setUsers(data);
       } catch {
         setError('Fehler beim Laden der Benutzer.');
@@ -74,7 +74,7 @@ export const GroupUserList: React.FC = () => {
       }
     };
     loadUsers();
-  }, [GroupId]);
+  }, [groupId]);
 
   const handleUserAdded = (newUser: any) => {
     setUsers((prev) => [...prev, newUser]);

@@ -12,9 +12,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<Startseite />} />
-      <Route path="/Group/:GroupId" element={<EditGroupPage />} />
+      <Route path="/group/:groupId" element={<EditGroupPage />} />
       
-      <Route path="/Group-users/:GroupId" element={<GroupUserList />} />
+      <Route path="/group-users/:groupId" element={<GroupUserList />} />
     </Routes>
   </BrowserRouter>
 );
