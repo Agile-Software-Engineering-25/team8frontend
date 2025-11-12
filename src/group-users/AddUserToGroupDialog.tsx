@@ -87,7 +87,7 @@ export const AddUserToGroupDialog: React.FC<Props> = ({ onClose, onAdd }) => {
             {filtered.map((u) => (
               <div
                 key={u.id}
-                className="permission-item"
+                className="role-item"
                 onClick={() => onAdd(u)}
                 style={{ cursor: 'pointer' }}
               >

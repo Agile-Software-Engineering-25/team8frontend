@@ -5,27 +5,27 @@ import type { DropResult } from 'react-beautiful-dnd';
 import './EditGroup.css';
 
 // --- INTERFACES ---
-interface Permission {
+interface Role {
   id: string;
   name: string;
 }
 
 // --- MOCK API FUNCTIONS ---
 
-const fetchAllPermissions = async (): Promise<Permission[]> => {
-  console.log('Lade alle verfügbaren Berechtigungen...');
-  const allPermissions: Permission[] = [
-    { id: 'perm-1', name: 'Benutzer erstellen' },
-    { id: 'perm-2', name: 'Benutzer löschen' },
-    { id: 'perm-3', name: 'Artikel veröffentlichen' },
-    { id: 'perm-4', name: 'Artikel bearbeiten' },
-    { id: 'perm-5', name: 'Kommentare moderieren' },
-    { id: 'perm-6', name: 'Dashboard ansehen' },
-    { id: 'perm-7', name: 'Einstellungen ändern' },
-    { id: 'perm-8', name: 'Berichte exportieren' },
+const fetchAllRoles = async (): Promise<Role[]> => {
+  console.log('Lade alle verfügbaren Rollen...');
+  const allRoles: Role[] = [
+    { id: 'role-1', name: 'Benutzer erstellen' },
+    { id: 'role-2', name: 'Benutzer löschen' },
+    { id: 'role-3', name: 'Artikel veröffentlichen' },
+    { id: 'role-4', name: 'Artikel bearbeiten' },
+    { id: 'role-5', name: 'Kommentare moderieren' },
+    { id: 'role-6', name: 'Dashboard ansehen' },
+    { id: 'role-7', name: 'Einstellungen ändern' },
+    { id: 'role-8', name: 'Berichte exportieren' },
   ];
   return new Promise((resolve) =>
-    setTimeout(() => resolve(allPermissions), 300)
+    setTimeout(() => resolve(allRoles), 300)
   );
 };
 
@@ -34,31 +34,31 @@ const fetchGroupDetails = async (groupId: string) => {
   const mockGroup = {
     id: parseInt(groupId),
     name: `Informatik Gruppe F-${groupId}`,
-    assignedPermissionIds: ['perm-3', 'perm-4', 'perm-6'],
+    assignedRoleIds: ['role-3', 'role-4', 'role-6'],
   };
   return new Promise<{
     id: number;
     name: string;
-    assignedPermissionIds: string[];
+    assignedRoleIds: string[];
   }>((resolve) => setTimeout(() => resolve(mockGroup), 500));
 };
 
-const addPermissionToGroup = async (
+const addRoleToGroup = async (
   groupId: string,
-  permissionId: string
+  roleId: string
 ): Promise<void> => {
   console.log(
-    `API CALL: Füge Berechtigung '${permissionId}' zu Gruppe '${groupId}' hinzu.`
+    `API CALL: Füge Rolle '${roleId}' zu Gruppe '${groupId}' hinzu.`
   );
   return new Promise((resolve) => setTimeout(resolve, 400));
 };
 
-const removePermissionFromGroup = async (
+const removeRoleFromGroup = async (
   groupId: string,
-  permissionId: string
+  roleId: string
 ): Promise<void> => {
   console.log(
-    `API CALL: Entferne Berechtigung '${permissionId}' von Gruppe '${groupId}'.`
+    `API CALL: Entferne Rolle '${roleId}' von Gruppe '${groupId}'.`
   );
   return new Promise((resolve) => setTimeout(resolve, 400));
 };
@@ -93,8 +93,8 @@ export const EditGroupPage: React.FC = () => {
   const isNewGroup = groupId === 'new';
 
   const [GroupName, setGroupName] = useState('');
-  const [assigned, setAssigned] = useState<Permission[]>([]);
-  const [available, setAvailable] = useState<Permission[]>([]);
+  const [assigned, setAssigned] = useState<Role[]>([]);
+  const [available, setAvailable] = useState<Role[]>([]);
   const [loading, setLoading] = useState(true);
   const [assignedSearch, setAssignedSearch] = useState('');
   const [availableSearch, setAvailableSearch] = useState('');
@@ -106,11 +106,11 @@ export const EditGroupPage: React.FC = () => {
       console.log("loadData() called with groupId =", groupId, "isNewGroup =", isNewGroup);
       setLoading(true);
       if (isNewGroup) {
-        const [allPermissions, standardGroupsData] = await Promise.all([
-          fetchAllPermissions(),
+        const [allRoles, standardGroupsData] = await Promise.all([
+          fetchAllRoles(),
           fetchStandardGroups(),
         ]);
-        setAvailable(allPermissions);
+        setAvailable(allRoles);
         setAssigned([]);
         setGroupName('');
         setStandardGroups(standardGroupsData);
@@ -119,19 +119,19 @@ export const EditGroupPage: React.FC = () => {
         }
       } else if (groupId) {
         // Modus: Bestehende Gruppe bearbeiten
-        const [allPermissions, GroupDetails] = await Promise.all([
-          fetchAllPermissions(),
+        const [allRoles, GroupDetails] = await Promise.all([
+          fetchAllRoles(),
           fetchGroupDetails(groupId),
         ]);
         setGroupName(GroupDetails.name);
-        const assignedPerms = allPermissions.filter((p) =>
-          GroupDetails.assignedPermissionIds.includes(p.id)
+        const assignedRoles = allRoles.filter((p) =>
+          GroupDetails.assignedRoleIds.includes(p.id)
         );
-        const availablePerms = allPermissions.filter(
-          (p) => !GroupDetails.assignedPermissionIds.includes(p.id)
+        const availableRoles = allRoles.filter(
+          (p) => !GroupDetails.assignedRoleIds.includes(p.id)
         );
-        setAssigned(assignedPerms);
-        setAvailable(availablePerms);
+        setAssigned(assignedRoles);
+        setAvailable(availableRoles);
       }
       setLoading(false);
     };
@@ -167,12 +167,12 @@ export const EditGroupPage: React.FC = () => {
     if (isMovingBetweenLists && !isNewGroup && groupId) {
       try {
         if (destListId === 'assigned') {
-          await addPermissionToGroup(groupId, draggableId);
+          await addRoleToGroup(groupId, draggableId);
         } else {
-          await removePermissionFromGroup(groupId, draggableId);
+          await removeRoleFromGroup(groupId, draggableId);
         }
       } catch (error) {
-        console.error('Fehler beim Aktualisieren der Berechtigung:', error);
+        console.error('Fehler beim Aktualisieren der Rolle:', error);
       }
     }
   };
@@ -230,9 +230,9 @@ export const EditGroupPage: React.FC = () => {
       </div>
 
       <DragDropContext onDragEnd={onDragEnd}>
-        <div className="permission-columns">
-          <div className="permission-column">
-            <h2>Zugewiesene Berechtigungen ({filteredAssigned.length})</h2>
+        <div className="role-columns">
+          <div className="role-column">
+            <h2>Zugewiesene Rollen ({filteredAssigned.length})</h2>
             <input
               type="text"
               placeholder="Suchen..."
@@ -245,12 +245,12 @@ export const EditGroupPage: React.FC = () => {
                 <div
                   {...provided.droppableProps}
                   ref={provided.innerRef}
-                  className="permission-list"
+                  className="role-list"
                 >
-                  {filteredAssigned.map((perm, index) => (
+                  {filteredAssigned.map((role, index) => (
                     <Draggable
-                      key={perm.id}
-                      draggableId={perm.id}
+                      key={role.id}
+                      draggableId={role.id}
                       index={index}
                     >
                       {(provided) => (
@@ -258,9 +258,9 @@ export const EditGroupPage: React.FC = () => {
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                          className="permission-item"
+                          className="role-item"
                         >
-                          {perm.name}
+                          {role.name}
                         </div>
                       )}
                     </Draggable>
@@ -271,8 +271,8 @@ export const EditGroupPage: React.FC = () => {
             </Droppable>
           </div>
 
-          <div className="permission-column">
-            <h2>Verfügbare Berechtigungen ({filteredAvailable.length})</h2>
+          <div className="role-column">
+            <h2>Verfügbare Rollen ({filteredAvailable.length})</h2>
             <input
               type="text"
               placeholder="Suchen..."
@@ -285,12 +285,12 @@ export const EditGroupPage: React.FC = () => {
                 <div
                   {...provided.droppableProps}
                   ref={provided.innerRef}
-                  className="permission-list"
+                  className="role-list"
                 >
-                  {filteredAvailable.map((perm, index) => (
+                  {filteredAvailable.map((role, index) => (
                     <Draggable
-                      key={perm.id}
-                      draggableId={perm.id}
+                      key={role.id}
+                      draggableId={role.id}
                       index={index}
                     >
                       {(provided) => (
@@ -298,9 +298,9 @@ export const EditGroupPage: React.FC = () => {
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                          className="permission-item"
+                          className="role-item"
                         >
-                          {perm.name}
+                          {role.name}
                         </div>
                       )}
                     </Draggable>
