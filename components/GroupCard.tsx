@@ -4,8 +4,8 @@ import { Link, useNavigate } from 'react-router-dom';
 export interface UserGroup {
   id: number;
   name: string;
-  standardGroup: string;
-  userCount: number;
+  memberCount: number;
+  parentName: string
 }
 
 interface GroupCardProps {
@@ -30,7 +30,7 @@ const EditIcon = () => (
 );
 
 export const GroupCard: React.FC<GroupCardProps> = ({ Group }) => {
-  const isCustomGroup = Group.standardGroup === '';
+  const isCustomGroup = Group.parentName === '';
   const navigate = useNavigate();
 
   const handleViewGroupUsers = () => {
@@ -51,9 +51,9 @@ export const GroupCard: React.FC<GroupCardProps> = ({ Group }) => {
 
       <div className="card-content">
         <span className={`group-badge ${isCustomGroup ? 'custom' : 'default'}`}>
-          {isCustomGroup ? 'Eigene gruppe' : Group.standardGroup}
+          {isCustomGroup ? 'Eigene gruppe' : Group.parentName}
         </span>
-        <p className="user-count">Anzahl Personen: {Group.userCount}</p>
+        <p className="user-count">Anzahl Personen: {Group.memberCount}</p>
       </div>
 
       <button className="btn btn-view-users" onClick={handleViewGroupUsers}>

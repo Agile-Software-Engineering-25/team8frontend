@@ -5,37 +5,31 @@ import { GroupCard } from '../components/GroupCard';
 import type { UserGroup } from '../components/GroupCard';
 import './MainPage.css';
 
-const fetchGroupsFromBackend = (): Promise<UserGroup[]> => {
+const fetchGroupsFromBackend = async (): Promise<UserGroup[]> => {
   console.log('Rufe Gruppen vom Backend ab...');
-  const mockGroups: UserGroup[] = [
-    {
-      id: 1,
-      name: 'Globaler Administrator',
-      standardGroup: 'Administrator',
-      userCount: 5,
-    },
-    { id: 2, name: 'Marketing Team', standardGroup: 'PR', userCount: 12 },
-    {
-      id: 3,
-      name: 'Informatik Gruppe F-3',
-      standardGroup: 'Student',
-      userCount: 25,
-    },
-    { id: 4, name: 'Alle Dozenten', standardGroup: 'Dozent', userCount: 50 },
-    { id: 5, name: 'Werkstudenten IT', standardGroup: 'Student', userCount: 8 },
-    {
-      id: 6,
-      name: 'Informatik Gruppe F-2',
-      standardGroup: 'Student',
-      userCount: 31,
-    },
-  ];
+  const url = 'http://localhost:8080/api/ase-08/groups';
 
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(mockGroups);
-    }, 100);
-  });
+  try {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(`HTTP-Fehler! Status: ${response.status}`);
+    }
+
+    const data: UserGroup[] = await response.json();
+    const processedData: UserGroup[] = data.map(group => {
+      return {
+        ...group,       
+        parentName: group.parentName ?? "NULL"
+      };
+    });
+
+    return processedData;
+
+  } catch (error) {
+    console.error('Fehler beim Abrufen der Gruppen:', error);
+    return [];
+  }
 };
 
 export const Startseite: React.FC = () => {
@@ -66,9 +60,9 @@ export const Startseite: React.FC = () => {
     loadGroups();
   }, []);
 
-  const standardGroupTypes = useMemo(() => {
+  const parentNameTypes = useMemo(() => {
     const uniqueGroups = new Set(
-      Groups.map((Group) => Group.standardGroup).filter(
+      Groups.map((Group) => Group.parentName).filter(
         (GroupName) => GroupName !== ''
       )
     );
@@ -82,8 +76,8 @@ export const Startseite: React.FC = () => {
         .includes(searchTerm.toLowerCase());
       const matchesFilter =
         filter === 'all' ||
-        Group.standardGroup === '' ||
-        Group.standardGroup === filter;
+        Group.parentName === '' ||
+        Group.parentName === filter;
       return matchesSearch && matchesFilter;
     });
   }, [searchTerm, filter, Groups]);
@@ -109,7 +103,7 @@ export const Startseite: React.FC = () => {
           onChange={(e) => setFilter(e.target.value)}
         >
           <option value="all">Alle Gruppen</option>
-          {standardGroupTypes.map((GroupType) => (
+          {parentNameTypes.map((GroupType) => (
             <option key={GroupType} value={GroupType}>
               {GroupType}
             </option>
