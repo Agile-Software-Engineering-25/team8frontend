@@ -33,12 +33,6 @@ export const GroupCard: React.FC<GroupCardProps> = ({ Group }) => {
   const isCustomGroup = Group.standardGroup === '';
   const navigate = useNavigate();
 
-  const handleViewBaseUsers = () => {
-    navigate(`/base-group/${Group.id}`, {
-      state: { standardGroup: Group.standardGroup, GroupName: Group.name },
-    });
-  };
-
   const handleViewGroupUsers = () => {
     navigate(`/group-users/${Group.id}`, {
       state: { GroupName: Group.name },
@@ -61,10 +55,6 @@ export const GroupCard: React.FC<GroupCardProps> = ({ Group }) => {
         </span>
         <p className="user-count">Anzahl Personen: {Group.userCount}</p>
       </div>
-
-      <button className="btn btn-view-users" onClick={handleViewBaseUsers}>
-        Benutzer dieser Standardgruppe anzeigen
-      </button>
 
       <button className="btn btn-view-users" onClick={handleViewGroupUsers}>
         Benutzer dieser Gruppe anzeigen
