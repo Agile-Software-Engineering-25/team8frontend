@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useLocation, Link } from 'react-router-dom';
-import '../base-role/UserBaseRoleList.css';
-import { AddUserToRoleDialog } from './AddUserToRoleDialog';
+import './base.css';
+import { AddUserToGroupDialog } from './AddUserToGroupDialog';
 
 // --- ICONS ---
 const ArrowLeftIcon = () => (
@@ -22,8 +22,8 @@ const ArrowLeftIcon = () => (
 );
 
 // --- MOCK / API ---
-const getAllUsersByRole = async (roleId: string) => {
-  console.log('Mock-API call → getAllUsersByRole', roleId);
+const getAllUsersByGroup = async (groupId: string) => {
+  console.log('Mock-API call → getAllUsersByGroup', groupId);
 
   const mockUsers = [
     {
@@ -49,11 +49,11 @@ const getAllUsersByRole = async (roleId: string) => {
   );
 };
 
-export const RoleUserList: React.FC = () => {
-  const { roleId } = useParams<{ roleId: string }>();
+export const GroupUserList: React.FC = () => {
+  const { groupId } = useParams<{ groupId: string }>();
   const location = useLocation();
-  const roleName =
-    (location.state as { roleName?: string })?.roleName ?? 'Unbekannt';
+  const GroupName =
+    (location.state as { GroupName?: string })?.GroupName ?? 'Unbekannt';
 
   const [users, setUsers] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -65,7 +65,7 @@ export const RoleUserList: React.FC = () => {
     const loadUsers = async () => {
       try {
         setIsLoading(true);
-        const data = await getAllUsersByRole(roleId ?? '');
+        const data = await getAllUsersByGroup(groupId ?? '');
         setUsers(data);
       } catch {
         setError('Fehler beim Laden der Benutzer.');
@@ -74,7 +74,7 @@ export const RoleUserList: React.FC = () => {
       }
     };
     loadUsers();
-  }, [roleId]);
+  }, [groupId]);
 
   const handleUserAdded = (newUser: any) => {
     setUsers((prev) => [...prev, newUser]);
@@ -88,7 +88,7 @@ export const RoleUserList: React.FC = () => {
           <Link to="/" className="back-link">
             <ArrowLeftIcon />
           </Link>
-          <h1 className="userlist-title">Benutzer der Rolle "{roleName}"</h1>
+          <h1 className="userlist-title">Benutzer der Gruppe "{GroupName}"</h1>
         </div>
 
         <div className="header-actions">
@@ -133,7 +133,7 @@ export const RoleUserList: React.FC = () => {
       </section>
 
       {showAddDialog && (
-        <AddUserToRoleDialog
+        <AddUserToGroupDialog
           onClose={() => setShowAddDialog(false)}
           onAdd={handleUserAdded}
         />

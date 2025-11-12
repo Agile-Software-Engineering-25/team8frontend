@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './AddUserToRoleDialog.css';
+import './AddUserToGroupDialog.css';
 
 // --- ICON ---
 const CloseIcon = () => (
@@ -42,7 +42,7 @@ interface Props {
   onAdd: (user: any) => void;
 }
 
-export const AddUserToRoleDialog: React.FC<Props> = ({ onClose, onAdd }) => {
+export const AddUserToGroupDialog: React.FC<Props> = ({ onClose, onAdd }) => {
   const [allUsers, setAllUsers] = useState<any[]>([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
@@ -87,7 +87,7 @@ export const AddUserToRoleDialog: React.FC<Props> = ({ onClose, onAdd }) => {
             {filtered.map((u) => (
               <div
                 key={u.id}
-                className="permission-item"
+                className="role-item"
                 onClick={() => onAdd(u)}
                 style={{ cursor: 'pointer' }}
               >

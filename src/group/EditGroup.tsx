@@ -2,71 +2,65 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import type { DropResult } from 'react-beautiful-dnd';
-import './RolleEditieren.css';
+import './EditGroup.css';
 
 // --- INTERFACES ---
-interface Permission {
+interface Role {
   id: string;
   name: string;
 }
 
 // --- MOCK API FUNCTIONS ---
 
-const fetchAllPermissions = async (): Promise<Permission[]> => {
-  console.log('Lade alle verfügbaren Berechtigungen...');
-  const allPermissions: Permission[] = [
-    { id: 'perm-1', name: 'Benutzer erstellen' },
-    { id: 'perm-2', name: 'Benutzer löschen' },
-    { id: 'perm-3', name: 'Artikel veröffentlichen' },
-    { id: 'perm-4', name: 'Artikel bearbeiten' },
-    { id: 'perm-5', name: 'Kommentare moderieren' },
-    { id: 'perm-6', name: 'Dashboard ansehen' },
-    { id: 'perm-7', name: 'Einstellungen ändern' },
-    { id: 'perm-8', name: 'Berichte exportieren' },
+const fetchAllRoles = async (): Promise<Role[]> => {
+  console.log('Lade alle verfügbaren Rollen...');
+  const allRoles: Role[] = [
+    { id: 'role-1', name: 'Benutzer erstellen' },
+    { id: 'role-2', name: 'Benutzer löschen' },
+    { id: 'role-3', name: 'Artikel veröffentlichen' },
+    { id: 'role-4', name: 'Artikel bearbeiten' },
+    { id: 'role-5', name: 'Kommentare moderieren' },
+    { id: 'role-6', name: 'Dashboard ansehen' },
+    { id: 'role-7', name: 'Einstellungen ändern' },
+    { id: 'role-8', name: 'Berichte exportieren' },
   ];
-  return new Promise((resolve) =>
-    setTimeout(() => resolve(allPermissions), 300)
-  );
+  return new Promise((resolve) => setTimeout(() => resolve(allRoles), 300));
 };
 
-const fetchRoleDetails = async (roleId: string) => {
-  console.log(`Lade Details für Rolle ${roleId}...`);
-  const mockRole = {
-    id: parseInt(roleId),
-    name: `Informatik Gruppe F-${roleId}`,
-    assignedPermissionIds: ['perm-3', 'perm-4', 'perm-6'],
+const fetchGroupDetails = async (groupId: string) => {
+  console.log(`Lade Details für Gruppe ${groupId}...`);
+  const mockGroup = {
+    id: parseInt(groupId),
+    name: `Informatik Gruppe F-${groupId}`,
+    assignedRoleIds: ['role-3', 'role-4', 'role-6'],
   };
   return new Promise<{
     id: number;
     name: string;
-    assignedPermissionIds: string[];
-  }>((resolve) => setTimeout(() => resolve(mockRole), 500));
+    assignedRoleIds: string[];
+  }>((resolve) => setTimeout(() => resolve(mockGroup), 500));
 };
 
-const addPermissionToRole = async (
-  roleId: string,
-  permissionId: string
+const addRoleToGroup = async (
+  groupId: string,
+  roleId: string
 ): Promise<void> => {
-  console.log(
-    `API CALL: Füge Berechtigung '${permissionId}' zu Rolle '${roleId}' hinzu.`
-  );
+  console.log(`API CALL: Füge Rolle '${roleId}' zu Gruppe '${groupId}' hinzu.`);
   return new Promise((resolve) => setTimeout(resolve, 400));
 };
 
-const removePermissionFromRole = async (
-  roleId: string,
-  permissionId: string
+const removeRoleFromGroup = async (
+  groupId: string,
+  roleId: string
 ): Promise<void> => {
-  console.log(
-    `API CALL: Entferne Berechtigung '${permissionId}' von Rolle '${roleId}'.`
-  );
+  console.log(`API CALL: Entferne Rolle '${roleId}' von Gruppe '${groupId}'.`);
   return new Promise((resolve) => setTimeout(resolve, 400));
 };
 
-const fetchStandardRoles = async (): Promise<string[]> => {
-  console.log('Lade verfügbare Standardrollen...');
-  const roles = ['Administrator', 'PR', 'Student', 'Dozent', 'Redakteur'];
-  return new Promise((resolve) => setTimeout(() => resolve(roles), 200));
+const fetchStandardGroups = async (): Promise<string[]> => {
+  console.log('Lade verfügbare StandardGruppen...');
+  const Groups = ['Administrator', 'PR', 'Student', 'Dozent', 'Redakteur'];
+  return new Promise((resolve) => setTimeout(() => resolve(Groups), 200));
 };
 
 // --- HELPER COMPONENTS ---
@@ -88,55 +82,60 @@ const ArrowLeftIcon = () => (
 );
 
 // --- MAIN COMPONENT ---
-export const EditRolePage: React.FC = () => {
-  const { roleId } = useParams<{ roleId: string }>();
-  const isNewRole = roleId === 'new';
+export const EditGroupPage: React.FC = () => {
+  const { groupId } = useParams<{ groupId: string }>();
+  const isNewGroup = groupId === 'new';
 
-  const [roleName, setRoleName] = useState('');
-  const [assigned, setAssigned] = useState<Permission[]>([]);
-  const [available, setAvailable] = useState<Permission[]>([]);
+  const [GroupName, setGroupName] = useState('');
+  const [assigned, setAssigned] = useState<Role[]>([]);
+  const [available, setAvailable] = useState<Role[]>([]);
   const [loading, setLoading] = useState(true);
   const [assignedSearch, setAssignedSearch] = useState('');
   const [availableSearch, setAvailableSearch] = useState('');
-  const [standardRoles, setStandardRoles] = useState<string[]>([]);
-  const [selectedStandardRole, setSelectedStandardRole] = useState('');
+  const [standardGroups, setStandardGroups] = useState<string[]>([]);
+  const [selectedStandardGroup, setSelectedStandardGroup] = useState('');
 
   useEffect(() => {
     const loadData = async () => {
+      console.log(
+        'loadData() called with groupId =',
+        groupId,
+        'isNewGroup =',
+        isNewGroup
+      );
       setLoading(true);
-      if (isNewRole) {
-        // Modus: Neue Rolle erstellen
-        const [allPermissions, standardRolesData] = await Promise.all([
-          fetchAllPermissions(),
-          fetchStandardRoles(),
+      if (isNewGroup) {
+        const [allRoles, standardGroupsData] = await Promise.all([
+          fetchAllRoles(),
+          fetchStandardGroups(),
         ]);
-        setAvailable(allPermissions);
+        setAvailable(allRoles);
         setAssigned([]);
-        setRoleName('');
-        setStandardRoles(standardRolesData);
-        if (standardRolesData.length > 0) {
-          setSelectedStandardRole(standardRolesData[0]);
+        setGroupName('');
+        setStandardGroups(standardGroupsData);
+        if (standardGroupsData.length > 0) {
+          setSelectedStandardGroup(standardGroupsData[0]);
         }
-      } else if (roleId) {
-        // Modus: Bestehende Rolle bearbeiten
-        const [allPermissions, roleDetails] = await Promise.all([
-          fetchAllPermissions(),
-          fetchRoleDetails(roleId),
+      } else if (groupId) {
+        // Modus: Bestehende Gruppe bearbeiten
+        const [allRoles, GroupDetails] = await Promise.all([
+          fetchAllRoles(),
+          fetchGroupDetails(groupId),
         ]);
-        setRoleName(roleDetails.name);
-        const assignedPerms = allPermissions.filter((p) =>
-          roleDetails.assignedPermissionIds.includes(p.id)
+        setGroupName(GroupDetails.name);
+        const assignedRoles = allRoles.filter((p) =>
+          GroupDetails.assignedRoleIds.includes(p.id)
         );
-        const availablePerms = allPermissions.filter(
-          (p) => !roleDetails.assignedPermissionIds.includes(p.id)
+        const availableRoles = allRoles.filter(
+          (p) => !GroupDetails.assignedRoleIds.includes(p.id)
         );
-        setAssigned(assignedPerms);
-        setAvailable(availablePerms);
+        setAssigned(assignedRoles);
+        setAvailable(availableRoles);
       }
       setLoading(false);
     };
     loadData();
-  }, [roleId, isNewRole]);
+  }, [groupId, isNewGroup]);
 
   const onDragEnd = async (result: DropResult) => {
     const { source, destination, draggableId } = result;
@@ -164,15 +163,15 @@ export const EditRolePage: React.FC = () => {
       );
     }
 
-    if (isMovingBetweenLists && !isNewRole && roleId) {
+    if (isMovingBetweenLists && !isNewGroup && groupId) {
       try {
         if (destListId === 'assigned') {
-          await addPermissionToRole(roleId, draggableId);
+          await addRoleToGroup(groupId, draggableId);
         } else {
-          await removePermissionFromRole(roleId, draggableId);
+          await removeRoleFromGroup(groupId, draggableId);
         }
       } catch (error) {
-        console.error('Fehler beim Aktualisieren der Berechtigung:', error);
+        console.error('Fehler beim Aktualisieren der Rolle:', error);
       }
     }
   };
@@ -194,22 +193,22 @@ export const EditRolePage: React.FC = () => {
           <Link to="/" className="back-link">
             <ArrowLeftIcon />
           </Link>
-          <h1>{isNewRole ? 'Neue Rolle erstellen' : 'Rolle bearbeiten'}</h1>
+          <h1>{isNewGroup ? 'Neue Gruppe erstellen' : 'Gruppe bearbeiten'}</h1>
         </div>
 
         {/* --- Wrapper für die Aktionen rechts --- */}
         <div className="header-actions">
-          {isNewRole && (
-            <div className="standard-role-selector">
-              <label htmlFor="standard-role">Standardrolle</label>
+          {isNewGroup && (
+            <div className="standard-group-selector">
+              <label htmlFor="standard-group">StandardGruppe</label>
               <select
-                id="standard-role"
-                value={selectedStandardRole}
-                onChange={(e) => setSelectedStandardRole(e.target.value)}
+                id="standard-group"
+                value={selectedStandardGroup}
+                onChange={(e) => setSelectedStandardGroup(e.target.value)}
               >
-                {standardRoles.map((role) => (
-                  <option key={role} value={role}>
-                    {role}
+                {standardGroups.map((group) => (
+                  <option key={group} value={group}>
+                    {group}
                   </option>
                 ))}
               </select>
@@ -217,22 +216,22 @@ export const EditRolePage: React.FC = () => {
           )}
           <input
             type="text"
-            value={roleName}
-            onChange={(e) => setRoleName(e.target.value)}
-            placeholder={isNewRole ? 'Name der neuen Rolle' : ''}
-            className="role-name-input"
+            value={GroupName}
+            onChange={(e) => setGroupName(e.target.value)}
+            placeholder={isNewGroup ? 'Name der neuen Gruppe' : ''}
+            className="group-name-input"
           />
           <button className="btn btn-primary">
-            {isNewRole ? 'Rolle erstellen' : 'Änderungen speichern'}
+            {isNewGroup ? 'Gruppe erstellen' : 'Änderungen speichern'}
           </button>
         </div>
         {/* --- Ende des Wrappers --- */}
       </div>
 
       <DragDropContext onDragEnd={onDragEnd}>
-        <div className="permission-columns">
-          <div className="permission-column">
-            <h2>Zugewiesene Berechtigungen ({filteredAssigned.length})</h2>
+        <div className="role-columns">
+          <div className="role-column">
+            <h2>Zugewiesene Rollen ({filteredAssigned.length})</h2>
             <input
               type="text"
               placeholder="Suchen..."
@@ -245,12 +244,12 @@ export const EditRolePage: React.FC = () => {
                 <div
                   {...provided.droppableProps}
                   ref={provided.innerRef}
-                  className="permission-list"
+                  className="role-list"
                 >
-                  {filteredAssigned.map((perm, index) => (
+                  {filteredAssigned.map((role, index) => (
                     <Draggable
-                      key={perm.id}
-                      draggableId={perm.id}
+                      key={role.id}
+                      draggableId={role.id}
                       index={index}
                     >
                       {(provided) => (
@@ -258,9 +257,9 @@ export const EditRolePage: React.FC = () => {
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                          className="permission-item"
+                          className="role-item"
                         >
-                          {perm.name}
+                          {role.name}
                         </div>
                       )}
                     </Draggable>
@@ -271,8 +270,8 @@ export const EditRolePage: React.FC = () => {
             </Droppable>
           </div>
 
-          <div className="permission-column">
-            <h2>Verfügbare Berechtigungen ({filteredAvailable.length})</h2>
+          <div className="role-column">
+            <h2>Verfügbare Rollen ({filteredAvailable.length})</h2>
             <input
               type="text"
               placeholder="Suchen..."
@@ -285,12 +284,12 @@ export const EditRolePage: React.FC = () => {
                 <div
                   {...provided.droppableProps}
                   ref={provided.innerRef}
-                  className="permission-list"
+                  className="role-list"
                 >
-                  {filteredAvailable.map((perm, index) => (
+                  {filteredAvailable.map((role, index) => (
                     <Draggable
-                      key={perm.id}
-                      draggableId={perm.id}
+                      key={role.id}
+                      draggableId={role.id}
                       index={index}
                     >
                       {(provided) => (
@@ -298,9 +297,9 @@ export const EditRolePage: React.FC = () => {
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                          className="permission-item"
+                          className="role-item"
                         >
-                          {perm.name}
+                          {role.name}
                         </div>
                       )}
                     </Draggable>

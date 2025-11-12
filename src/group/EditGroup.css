@@ -49,13 +49,13 @@
 }
 
 /* Label und Select-Box zu einem horizontalen Block */
-.standard-role-selector {
+.standard-group-selector {
   display: flex;
   align-items: center; /* Vertikal zentrieren (Label neben Select) */
   gap: 8px; /* Kleinerer Abstand zwischen Label und Select */
 }
 
-.standard-role-selector label {
+.standard-group-selector label {
   font-size: 0.9rem;
   font-weight: 500;
   color: #333;
@@ -65,8 +65,8 @@
 /* --- Vereinheitlichung der Formular-Elemente im Header --- */
 
 /* 1. Gemeinsame Höhe für alle Aktionselemente */
-.standard-role-selector select,
-.role-name-input,
+.standard-group-selector select,
+.group-name-input,
 .btn.btn-primary,
 button.btn-primary {
   height: 40px;
@@ -74,8 +74,8 @@ button.btn-primary {
 }
 
 /* 2. Gemeinsame Stile für Input-Felder (select und input) */
-.standard-role-selector select,
-.role-name-input {
+.standard-group-selector select,
+.group-name-input {
   padding: 8px;
   border-radius: 6px;
   border: 1px solid #ccc;
@@ -83,11 +83,11 @@ button.btn-primary {
 }
 
 /* 3. Spezifische Stile, die sich unterscheiden */
-.standard-role-selector select {
+.standard-group-selector select {
   min-width: 180px;
 }
 
-.role-name-input {
+.group-name-input {
   min-width: 200px;
 }
 
@@ -98,12 +98,12 @@ button.btn-primary {
 }
 
 /* --- Spalten-Layout (Drag & Drop) --- */
-.permission-columns {
+.role-columns {
   display: flex;
   gap: 24px;
 }
 
-.permission-column {
+.role-column {
   flex: 1;
   background-color: #f9f9f9;
   border-radius: 8px;
@@ -112,7 +112,7 @@ button.btn-primary {
   flex-direction: column;
 }
 
-.permission-column h2 {
+.role-column h2 {
   font-size: 1.1rem;
   margin-top: 0;
   margin-bottom: 12px;
@@ -128,7 +128,7 @@ button.btn-primary {
   box-sizing: border-box;
 }
 
-.permission-list {
+.role-list {
   min-height: 300px;
   background-color: #fff;
   border: 1px dashed #ddd;
@@ -138,7 +138,7 @@ button.btn-primary {
   overflow-y: auto;
 }
 
-.permission-item {
+.role-item {
   background-color: #fff;
   border: 1px solid #eee;
   border-radius: 6px;
@@ -149,6 +149,6 @@ button.btn-primary {
   transition: box-shadow 0.2s;
 }
 
-.permission-item:hover {
+.role-item:hover {
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
 }
