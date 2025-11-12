@@ -51,13 +51,13 @@
   background-color: #5a6268;
 }
 
-.roles-list {
+.groups-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.5rem;
 }
 
-.role-card {
+.group-card {
   background-color: #ffffff;
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -87,12 +87,12 @@
   background-color: #f0f0f0;
 }
 
-.role-name {
+.group-name {
   margin: 0 0 0.5rem 0;
   font-size: 1.25rem;
 }
 
-.role-badge {
+.group-badge {
   display: inline-block;
   padding: 0.25rem 0.75rem;
   border-radius: 12px;
@@ -101,12 +101,12 @@
   margin-bottom: 1rem;
 }
 
-.role-badge.default {
+.group-badge.default {
   background-color: #e0f7fa;
   color: #00796b;
 }
 
-.role-badge.custom {
+.group-badge.custom {
   background-color: #fff3e0;
   color: #ef6c00;
 }

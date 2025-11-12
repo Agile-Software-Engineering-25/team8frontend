@@ -49,13 +49,13 @@
 }
 
 /* Label und Select-Box zu einem horizontalen Block */
-.standard-role-selector {
+.standard-group-selector {
   display: flex;
   align-items: center; /* Vertikal zentrieren (Label neben Select) */
   gap: 8px; /* Kleinerer Abstand zwischen Label und Select */
 }
 
-.standard-role-selector label {
+.standard-group-selector label {
   font-size: 0.9rem;
   font-weight: 500;
   color: #333;
@@ -65,8 +65,8 @@
 /* --- Vereinheitlichung der Formular-Elemente im Header --- */
 
 /* 1. Gemeinsame Höhe für alle Aktionselemente */
-.standard-role-selector select,
-.role-name-input,
+.standard-group-selector select,
+.group-name-input,
 .btn.btn-primary,
 button.btn-primary {
   height: 40px;
@@ -74,8 +74,8 @@ button.btn-primary {
 }
 
 /* 2. Gemeinsame Stile für Input-Felder (select und input) */
-.standard-role-selector select,
-.role-name-input {
+.standard-group-selector select,
+.group-name-input {
   padding: 8px;
   border-radius: 6px;
   border: 1px solid #ccc;
@@ -83,11 +83,11 @@ button.btn-primary {
 }
 
 /* 3. Spezifische Stile, die sich unterscheiden */
-.standard-role-selector select {
+.standard-group-selector select {
   min-width: 180px;
 }
 
-.role-name-input {
+.group-name-input {
   min-width: 200px;
 }
 

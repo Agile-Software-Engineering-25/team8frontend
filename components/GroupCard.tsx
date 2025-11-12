@@ -1,15 +1,15 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-export interface UserRole {
+export interface UserGroup {
   id: number;
   name: string;
-  standardRole: string;
+  standardGroup: string;
   userCount: number;
 }
 
-interface RoleCardProps {
-  role: UserRole;
+interface GroupCardProps {
+  Group: UserGroup;
 }
 
 const EditIcon = () => (
@@ -29,45 +29,45 @@ const EditIcon = () => (
   </svg>
 );
 
-export const RoleCard: React.FC<RoleCardProps> = ({ role }) => {
-  const isCustomRole = role.standardRole === '';
+export const GroupCard: React.FC<GroupCardProps> = ({ Group }) => {
+  const isCustomGroup = Group.standardGroup === '';
   const navigate = useNavigate();
 
   const handleViewBaseUsers = () => {
-    navigate(`/base-role/${role.id}`, {
-      state: { standardRole: role.standardRole, roleName: role.name },
+    navigate(`/base-group/${Group.id}`, {
+      state: { standardGroup: Group.standardGroup, GroupName: Group.name },
     });
   };
 
-  const handleViewRoleUsers = () => {
-    navigate(`/role-users/${role.id}`, {
-      state: { roleName: role.name },
+  const handleViewGroupUsers = () => {
+    navigate(`/group-users/${Group.id}`, {
+      state: { GroupName: Group.name },
     });
   };
 
   return (
-    <div className="role-card">
-      <Link to={`/role/${role.id}`} className="edit-icon">
+    <div className="group-card">
+      <Link to={`/group/${Group.id}`} className="edit-icon">
         <EditIcon />
       </Link>
 
       <div className="card-header">
-        <h3 className="role-name">{role.name}</h3>
+        <h3 className="group-name">{Group.name}</h3>
       </div>
 
       <div className="card-content">
-        <span className={`role-badge ${isCustomRole ? 'custom' : 'default'}`}>
-          {isCustomRole ? 'Eigene Rolle' : role.standardRole}
+        <span className={`group-badge ${isCustomGroup ? 'custom' : 'default'}`}>
+          {isCustomGroup ? 'Eigene gruppe' : Group.standardGroup}
         </span>
-        <p className="user-count">Anzahl Personen: {role.userCount}</p>
+        <p className="user-count">Anzahl Personen: {Group.userCount}</p>
       </div>
 
       <button className="btn btn-view-users" onClick={handleViewBaseUsers}>
-        Benutzer dieser Standardrolle anzeigen
+        Benutzer dieser Standardgruppe anzeigen
       </button>
 
-      <button className="btn btn-view-users" onClick={handleViewRoleUsers}>
-        Benutzer dieser Rolle anzeigen
+      <button className="btn btn-view-users" onClick={handleViewGroupUsers}>
+        Benutzer dieser gruppe anzeigen
       </button>
     </div>
   );

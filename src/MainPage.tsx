@@ -1,45 +1,45 @@
 import React, { useState, useMemo, useEffect } from 'react';
 // HIER: 'useNavigate' importieren statt 'Link'
 import { useNavigate } from 'react-router-dom';
-import { RoleCard } from '../components/RoleCard';
-import type { UserRole } from '../components/RoleCard';
-import './Startseite.css';
+import { GroupCard } from '../components/GroupCard';
+import type { UserGroup } from '../components/GroupCard';
+import './MainPage.css';
 
-const fetchRolesFromBackend = (): Promise<UserRole[]> => {
-  console.log('Rufe Rollen vom Backend ab...');
-  const mockRoles: UserRole[] = [
+const fetchGroupsFromBackend = (): Promise<UserGroup[]> => {
+  console.log('Rufe Gruppen vom Backend ab...');
+  const mockGroups: UserGroup[] = [
     {
       id: 1,
       name: 'Globaler Administrator',
-      standardRole: 'Administrator',
+      standardGroup: 'Administrator',
       userCount: 5,
     },
-    { id: 2, name: 'Marketing Team', standardRole: 'PR', userCount: 12 },
+    { id: 2, name: 'Marketing Team', standardGroup: 'PR', userCount: 12 },
     {
       id: 3,
       name: 'Informatik Gruppe F-3',
-      standardRole: 'Student',
+      standardGroup: 'Student',
       userCount: 25,
     },
-    { id: 4, name: 'Alle Dozenten', standardRole: 'Dozent', userCount: 50 },
-    { id: 5, name: 'Werkstudenten IT', standardRole: 'Student', userCount: 8 },
+    { id: 4, name: 'Alle Dozenten', standardGroup: 'Dozent', userCount: 50 },
+    { id: 5, name: 'Werkstudenten IT', standardGroup: 'Student', userCount: 8 },
     {
       id: 6,
       name: 'Informatik Gruppe F-2',
-      standardRole: 'Student',
+      standardGroup: 'Student',
       userCount: 31,
     },
   ];
 
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve(mockRoles);
+      resolve(mockGroups);
     }, 100);
   });
 };
 
 export const Startseite: React.FC = () => {
-  const [roles, setRoles] = useState<UserRole[]>([]);
+  const [Groups, setGroups] = useState<UserGroup[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -49,48 +49,48 @@ export const Startseite: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const loadRoles = async () => {
+    const loadGroups = async () => {
       try {
         setIsLoading(true);
         setError(null);
-        const fetchedRoles = await fetchRolesFromBackend();
-        setRoles(fetchedRoles);
+        const fetchedGroups = await fetchGroupsFromBackend();
+        setGroups(fetchedGroups);
       } catch (err) {
-        setError('Fehler beim Laden der Rollen.');
+        setError('Fehler beim Laden der Gruppen.');
         console.error(err);
       } finally {
         setIsLoading(false);
       }
     };
 
-    loadRoles();
+    loadGroups();
   }, []);
 
-  const standardRoleTypes = useMemo(() => {
-    const uniqueRoles = new Set(
-      roles
-        .map((role) => role.standardRole)
-        .filter((roleName) => roleName !== '')
+  const standardGroupTypes = useMemo(() => {
+    const uniqueGroups = new Set(
+      Groups
+        .map((Group) => Group.standardGroup)
+        .filter((GroupName) => GroupName !== '')
     );
-    return Array.from(uniqueRoles);
-  }, [roles]);
+    return Array.from(uniqueGroups);
+  }, [Groups]);
 
-  const filteredRoles = useMemo(() => {
-    return roles.filter((role) => {
-      const matchesSearch = role.name
+  const filteredGroups = useMemo(() => {
+    return Groups.filter((Group) => {
+      const matchesSearch = Group.name
         .toLowerCase()
         .includes(searchTerm.toLowerCase());
       const matchesFilter =
         filter === 'all' ||
-        role.standardRole === '' ||
-        role.standardRole === filter;
+        Group.standardGroup === '' ||
+        Group.standardGroup === filter;
       return matchesSearch && matchesFilter;
     });
-  }, [searchTerm, filter, roles]);
+  }, [searchTerm, filter, Groups]);
 
   // HIER: Handler-Funktion für den Klick
-  const handleCreateNewRole = () => {
-    navigate('/role/new');
+  const handleCreateNewGroup = () => {
+    navigate('/Group/new');
   };
 
   return (
@@ -108,28 +108,28 @@ export const Startseite: React.FC = () => {
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
         >
-          <option value="all">Alle Rollen</option>
-          {standardRoleTypes.map((roleType) => (
-            <option key={roleType} value={roleType}>
-              {roleType}
+          <option value="all">Alle Gruppen</option>
+          {standardGroupTypes.map((GroupType) => (
+            <option key={GroupType} value={GroupType}>
+              {GroupType}
             </option>
           ))}
         </select>
 
-        <button onClick={handleCreateNewRole} className="btn btn-primary">
-          Benutzerrolle erstellen
+        <button onClick={handleCreateNewGroup} className="btn btn-primary">
+          BenutzerGruppe erstellen
         </button>
       </header>
 
-      <main className="roles-list">
-        {isLoading && <p>Rollen werden geladen...</p>}
+      <main className="groups-list">
+        {isLoading && <p>Gruppen werden geladen...</p>}
         {error && <p style={{ color: 'red' }}>{error}</p>}
         {!isLoading &&
           !error &&
-          (filteredRoles.length > 0 ? (
-            filteredRoles.map((role) => <RoleCard key={role.id} role={role} />)
+          (filteredGroups.length > 0 ? (
+            filteredGroups.map((Group) => <GroupCard key={Group.id} Group={Group} />)
           ) : (
-            <p>Keine Rollen gefunden.</p>
+            <p>Keine Gruppen gefunden.</p>
           ))}
       </main>
     </div>
