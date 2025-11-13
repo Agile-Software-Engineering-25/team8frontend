@@ -19,8 +19,8 @@ const fetchGroupsFromBackend = async (): Promise<UserGroup[]> => {
     const data: UserGroup[] = await response.json();
     const processedData: UserGroup[] = data.map(group => {
       return {
-        ...group,       
-        parentName: group.parentName ?? "NULL"
+        ...group,
+        parentName: group.parentName ?? "Keine Übergruppe"
       };
     });
 
@@ -32,14 +32,15 @@ const fetchGroupsFromBackend = async (): Promise<UserGroup[]> => {
   }
 };
 
+
 export const Startseite: React.FC = () => {
   const [Groups, setGroups] = useState<UserGroup[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [filter, setFilter] = useState<string>('all');
 
-  // HIER: Hook initialisieren
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -60,30 +61,33 @@ export const Startseite: React.FC = () => {
     loadGroups();
   }, []);
 
-  const parentNameTypes = useMemo(() => {
-    const uniqueGroups = new Set(
-      Groups.map((Group) => Group.parentName).filter(
-        (GroupName) => GroupName !== ''
-      )
-    );
-    return Array.from(uniqueGroups);
-  }, [Groups]);
-
-  const filteredGroups = useMemo(() => {
-    return Groups.filter((Group) => {
+  const processedGroups = useMemo(() => {
+    const filtered = Groups.filter((Group) => {
       const matchesSearch = Group.name
         .toLowerCase()
         .includes(searchTerm.toLowerCase());
-      const matchesFilter =
-        filter === 'all' ||
-        Group.parentName === '' ||
-        Group.parentName === filter;
-      return matchesSearch && matchesFilter;
+      return matchesSearch;
     });
-  }, [searchTerm, filter, Groups]);
+
+    filtered.sort((a, b) => {
+      const nameA = a.name.toLowerCase();
+      const nameB = b.name.toLowerCase();
+      if (sortOrder === 'asc') {
+        return nameA.localeCompare(nameB);
+      } else {
+        return nameB.localeCompare(nameA);
+      }
+    });
+
+    return filtered;
+
+  }, [searchTerm, sortOrder, Groups]);
 
   const handleCreateNewGroup = () => {
     navigate('/group/new');
+  };
+  const handleToggleSortOrder = () => {
+    setSortOrder(prevOrder => (prevOrder === 'asc' ? 'desc' : 'asc'));
   };
 
   return (
@@ -96,18 +100,9 @@ export const Startseite: React.FC = () => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <select
-          className="filter-select"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-        >
-          <option value="all">Alle Gruppen</option>
-          {parentNameTypes.map((GroupType) => (
-            <option key={GroupType} value={GroupType}>
-              {GroupType}
-            </option>
-          ))}
-        </select>
+        <button onClick={handleToggleSortOrder} className="btn">
+          Sortieren: {sortOrder === 'asc' ? 'Aufsteigend (A-Z)' : 'Absteigend (Z-A)'}
+        </button>
 
         <button onClick={handleCreateNewGroup} className="btn btn-primary">
           Benutzergruppe erstellen
@@ -119,8 +114,8 @@ export const Startseite: React.FC = () => {
         {error && <p style={{ color: 'red' }}>{error}</p>}
         {!isLoading &&
           !error &&
-          (filteredGroups.length > 0 ? (
-            filteredGroups.map((Group) => (
+          (processedGroups.length > 0 ? (
+            processedGroups.map((Group) => (
               <GroupCard key={Group.id} Group={Group} />
             ))
           ) : (
