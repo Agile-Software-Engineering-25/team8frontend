@@ -27,7 +27,7 @@ interface User {
 
 const getAllAvailableUsers = async (): Promise<User[]> => {
   console.log('Real-API call → getAllAvailableUsers');
-  const url = 'http://localhost:8080/api/ase-08/users?first=0&max=50';
+  const url = 'http://localhost:8080/api/ase-08/users?first=0&max=999999';
 
   const response = await fetch(url, {
     method: 'GET',
