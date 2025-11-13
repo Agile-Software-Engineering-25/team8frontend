@@ -3,7 +3,6 @@ import { useParams, useLocation, Link } from 'react-router-dom';
 import './base.css';
 import { AddUserToGroupDialog } from './AddUserToGroupDialog';
 
-// --- ICONS ---
 const ArrowLeftIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -21,32 +20,31 @@ const ArrowLeftIcon = () => (
   </svg>
 );
 
-// --- MOCK / API ---
-const getAllUsersByGroup = async (groupId: string) => {
-  console.log('Mock-API call → getAllUsersByGroup', groupId);
+interface User {
+  id: string;
+  username: string;
+  email: string;
+  enabled: boolean;
+}
 
-  const mockUsers = [
-    {
-      id: '1',
-      username: 'user01',
-      email: 'user01@example.com',
-      firstName: 'Lena',
-      lastName: 'Keller',
-      enabled: true,
-    },
-    {
-      id: '2',
-      username: 'user02',
-      email: 'user02@example.com',
-      firstName: 'Tom',
-      lastName: 'Richter',
-      enabled: true,
-    },
-  ];
+const getAllUsersByGroup = async (groupId: string): Promise<User[]> => {
+  console.log('Real-API call → getAllUsersByGroup', groupId);
 
-  return new Promise<typeof mockUsers>((resolve) =>
-    setTimeout(() => resolve(mockUsers), 300)
-  );
+  const url = `http://localhost:8080/api/ase-08/groups/${groupId}/users?first=0&max=999999`;
+
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      accept: '*/*',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`API call failed with status ${response.status}`);
+  }
+
+  const data: User[] = await response.json();
+  return data;
 };
 
 export const GroupUserList: React.FC = () => {
@@ -55,7 +53,7 @@ export const GroupUserList: React.FC = () => {
   const GroupName =
     (location.state as { GroupName?: string })?.GroupName ?? 'Unbekannt';
 
-  const [users, setUsers] = useState<any[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -63,11 +61,18 @@ export const GroupUserList: React.FC = () => {
 
   useEffect(() => {
     const loadUsers = async () => {
+      if (!groupId) {
+        setError('Keine Gruppen-ID gefunden.');
+        setIsLoading(false);
+        return;
+      }
+
       try {
         setIsLoading(true);
-        const data = await getAllUsersByGroup(groupId ?? '');
+        const data = await getAllUsersByGroup(groupId);
         setUsers(data);
-      } catch {
+      } catch (err) {
+        console.error(err);
         setError('Fehler beim Laden der Benutzer.');
       } finally {
         setIsLoading(false);
@@ -76,7 +81,7 @@ export const GroupUserList: React.FC = () => {
     loadUsers();
   }, [groupId]);
 
-  const handleUserAdded = (newUser: any) => {
+  const handleUserAdded = (newUser: User) => {
     setUsers((prev) => [...prev, newUser]);
     setShowAddDialog(false);
   };
@@ -114,8 +119,7 @@ export const GroupUserList: React.FC = () => {
               <tr>
                 <th>Username</th>
                 <th>E-Mail</th>
-                <th>Vorname</th>
-                <th>Nachname</th>
+                <th>Status</th>
               </tr>
             </thead>
             <tbody>
@@ -123,8 +127,7 @@ export const GroupUserList: React.FC = () => {
                 <tr key={u.id}>
                   <td>{u.username}</td>
                   <td>{u.email}</td>
-                  <td>{u.firstName}</td>
-                  <td>{u.lastName}</td>
+                  <td>{u.enabled ? 'Aktiv' : 'Inaktiv'}</td>
                 </tr>
               ))}
             </tbody>

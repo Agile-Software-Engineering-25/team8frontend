@@ -82,7 +82,6 @@ export const Startseite: React.FC = () => {
     });
   }, [searchTerm, filter, Groups]);
 
-  // HIER: Handler-Funktion für den Klick
   const handleCreateNewGroup = () => {
     navigate('/group/new');
   };
