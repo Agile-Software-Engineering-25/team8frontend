@@ -30,7 +30,7 @@ interface User {
 const getAllUsersByGroup = async (groupId: string): Promise<User[]> => {
   console.log('Real-API call → getAllUsersByGroup', groupId);
 
-  const url = `http://localhost:8080/api/ase-08/groups/${groupId}/users?first=0&max=999999`;
+  const url = `http://localhost:8080/api/ase-08/groups/${groupId}/users?first=0&max=100`;
 
   const response = await fetch(url, {
     method: 'GET',
@@ -42,7 +42,7 @@ const getAllUsersByGroup = async (groupId: string): Promise<User[]> => {
   if (!response.ok) {
     throw new Error(`API call failed with status ${response.status}`);
   }
-
+  
   const data: User[] = await response.json();
   return data;
 };
@@ -82,7 +82,17 @@ export const GroupUserList: React.FC = () => {
   }, [groupId]);
 
   const handleUserAdded = (newUser: User) => {
-    setUsers((prev) => [...prev, newUser]);
+    setUsers((prevUsers) => {
+      const alreadyExists = prevUsers.some(user => user.id === newUser.id);
+
+      if (alreadyExists) {
+        console.warn('Benutzer ist bereits in der Liste.');
+        return prevUsers;
+      }
+
+      return [...prevUsers, newUser];
+    });
+
     setShowAddDialog(false);
   };
 
@@ -137,6 +147,8 @@ export const GroupUserList: React.FC = () => {
 
       {showAddDialog && (
         <AddUserToGroupDialog
+          groupId={groupId ?? ''}
+          existingUsers={users}
           onClose={() => setShowAddDialog(false)}
           onAdd={handleUserAdded}
         />
