@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom/client';
 
 import './index.css';
-import App from './app.tsx';
+import App from './App';
 
 window.API_BASE_URL = 'http://localhost:8080/api/ase-08';
 

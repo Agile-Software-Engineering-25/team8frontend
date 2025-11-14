@@ -5,7 +5,7 @@ import { cssLifecycleFactory } from 'vite-plugin-single-spa/ex';
 import type { User } from 'oidc-client-ts';
 import { AuthProvider } from '@context/AuthContext';
 import type { AppProps } from 'single-spa';
-import App from './app';
+import App from './App';
 
 type RootProps = {
   getUser?: () => User | null;
