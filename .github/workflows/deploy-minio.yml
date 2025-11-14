@@ -25,7 +25,7 @@ jobs:
       - name: Build application
         run: npm run build
         env:
-          VITE_BACKEND_BASE_URL: "/masterdata/api/ase-08"
+          VITE_BACKEND_BASE_URL: "https://sau-portal.de/masterdata/api/ase-08"
 
       - name: Setup MinIO Client
         run: |
