@@ -8,11 +8,25 @@ declare global {
   }
 }
 
-const DEFAULT_BASE = '/api/ase-08';
-const fromEnv = (import.meta as any).env?.VITE_BACKEND_BASE_URL as string | undefined;
+interface ImportMetaEnv {
+  readonly VITE_BACKEND_BASE_URL?: string;
+}
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}
 
-window.API_BASE_URL = (fromEnv && fromEnv !== 'undefined' ? fromEnv : DEFAULT_BASE).replace(/\/+$/, '');
+const defaultBase = '/api/ase-08';
+const fromEnv = import.meta.env.VITE_BACKEND_BASE_URL;
 
-if (!window.API_BASE_URL) {console.error('API_BASE_URL ist nicht gesetzt!');}
+window.API_BASE_URL = (fromEnv && fromEnv !== 'undefined' ? fromEnv : defaultBase).replace(/\/+$/, '');
 
-ReactDOM.createRoot(document.getElementById('root')!).render(<App />);
+if (!window.API_BASE_URL) {
+  console.error('API_BASE_URL is not set');
+}
+
+const container = document.getElementById('root');
+if (!container) {
+  throw new Error("Root element with id 'root' not found");
+}
+
+ReactDOM.createRoot(container).render(<App />);
