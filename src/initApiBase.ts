@@ -1,6 +1,8 @@
 // src/initApiBase.ts
 declare global {
-  interface Window { API_BASE_URL: string; }
+  interface Window {
+      API_BASE_URL: string;
+      }
 }
 
 const stripSlash = (v: string) => v.replace(/\/+$/, '');
