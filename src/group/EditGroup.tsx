@@ -24,7 +24,7 @@ interface GroupDetails {
 
 const fetchAllRoles = async (): Promise<Role[]> => {
   console.log('Lade alle verfügbaren Rollen...');
-  const response = await fetch('http://localhost:8080/api/ase-08/roles', {
+  const response = await fetch(`${window.API_BASE_URL}/roles`, {
     method: 'GET',
     headers: {
       accept: '*/*',
@@ -39,7 +39,7 @@ const fetchAllRoles = async (): Promise<Role[]> => {
 const fetchGroupDetails = async (groupId: string): Promise<GroupDetails> => {
   console.log(`Lade Details für Gruppe ${groupId}...`);
   const response = await fetch(
-    `http://localhost:8080/api/ase-08/groups/${groupId}`,
+    `${window.API_BASE_URL}/groups/${groupId}`,
     {
       method: 'GET',
       headers: {
@@ -59,7 +59,7 @@ const addRoleToGroup = async (
 ): Promise<void> => {
   console.log(`API CALL: Füge Rolle '${roleId}' zu Gruppe '${groupId}' hinzu.`);
   const response = await fetch(
-    `http://localhost:8080/api/ase-08/groups/${groupId}/permissions`,
+    `${window.API_BASE_URL}/groups/${groupId}/permissions`,
     {
       method: 'POST',
       headers: {
@@ -82,7 +82,7 @@ const removeRoleFromGroup = async (
 ): Promise<void> => {
   console.log(`API CALL: Entferne Rolle '${roleId}' von Gruppe '${groupId}'.`);
   const response = await fetch(
-    `http://localhost:8080/api/ase-08/groups/${groupId}/permissions`,
+    `${window.API_BASE_URL}/groups/${groupId}/permissions`,
     {
       method: 'DELETE',
       headers: {
@@ -101,7 +101,7 @@ const removeRoleFromGroup = async (
 
 const fetchAllGroups = async (): Promise<Group[]> => {
   console.log('Lade verfügbare StandardGruppen (alle Gruppen)...');
-  const response = await fetch('http://localhost:8080/api/ase-08/groups', {
+  const response = await fetch(`${window.API_BASE_URL}/groups`, {
     method: 'GET',
     headers: {
       accept: '*/*',
@@ -121,7 +121,7 @@ const updateGroupName = async (
   console.log(
     `API CALL: Ändere Namen von Gruppe '${groupId}' zu '${newName}'.`
   );
-  const url = `http://localhost:8080/api/ase-08/groups/${groupId}`;
+  const url = `${window.API_BASE_URL}/groups/${groupId}`;
 
   const response = await fetch(url, {
     method: 'PUT',
