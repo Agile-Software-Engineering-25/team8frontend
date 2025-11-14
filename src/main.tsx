@@ -3,28 +3,19 @@ import './index.css';
 import App from './App';
 
 declare global {
-  interface ImportMetaEnv {
-    readonly VITE_BACKEND_BASE_URL?: string; // https://sau-portal.de/masterdata/api/ase-08
-  }
-  interface ImportMeta {
-    readonly env: ImportMetaEnv;
-  }
   interface Window {
     API_BASE_URL: string;
   }
 }
 
-const defaultBase = '/api/ase-08';
-const fromVite = import.meta.env?.VITE_BACKEND_BASE_URL;
+const DEFAULT_BASE = '/api/ase-08';
+const fromEnv = (import.meta as any).env?.VITE_BACKEND_BASE_URL as string | undefined;
 
-window.API_BASE_URL = (fromVite ?? defaultBase).replace(/\/+$/, '');
+window.API_BASE_URL = (fromEnv && fromEnv !== 'undefined' ? fromEnv : DEFAULT_BASE)
+  .replace(/\/+$/, '');
 
 if (!window.API_BASE_URL) {
-  console.error('API_BASE_URL ist nicht gesetzt.');
+  console.error('API_BASE_URL ist nicht gesetzt!');
 }
 
-const rootEl = document.getElementById('root');
-if (!rootEl) {
-  throw new Error('Root-Element #root nicht gefunden.');
-}
-ReactDOM.createRoot(rootEl).render(<App />);
+ReactDOM.createRoot(document.getElementById('root')!).render(<App />);
