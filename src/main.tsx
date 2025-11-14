@@ -4,7 +4,7 @@ import App from './App';
 
 declare global {
   interface ImportMetaEnv {
-    readonly VITE_BACKEND_BASE_URL?: string; // https://sau-portal.de/masterdata/api/ase-08
+    readonly VITE_BACKEND_BASE_URL?: string;
   }
   interface ImportMeta {
     readonly env: ImportMetaEnv;
@@ -27,4 +27,5 @@ const rootEl = document.getElementById('root');
 if (!rootEl) {
   throw new Error('Root-Element #root nicht gefunden.');
 }
-ReactDOM.createRoot(rootEl).render(<App />);
+
+ReactDOM.createRoot(container).render(<App />);
