@@ -3,9 +3,9 @@ import ReactDOMClient from 'react-dom/client';
 import singleSpaReact from 'single-spa-react';
 import { cssLifecycleFactory } from 'vite-plugin-single-spa/ex';
 import type { User } from 'oidc-client-ts';
+import { Startseite } from './MainPage';
 import { AuthProvider } from '@context/AuthContext';
 import type { AppProps } from 'single-spa';
-import App from './app';
 
 type RootProps = {
   getUser?: () => User | null;
@@ -27,7 +27,7 @@ const lifecycle = singleSpaReact<RootProps>({
     // Wrap App with AuthProvider; provider handles initial user + updates
     return (
       <AuthProvider getUser={getUser}>
-        <App {...appProps} />
+        <Startseite {...appProps} />
       </AuthProvider>
     );
   },

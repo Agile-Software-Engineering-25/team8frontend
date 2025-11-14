@@ -93,7 +93,6 @@ export const AddUserToGroupDialog: React.FC<Props> = ({
         setAllUsers(data);
       } catch (err) {
         setError('Benutzerliste konnte nicht geladen werden.');
-        console.log(err);
       } finally {
         setLoadingList(false);
       }
