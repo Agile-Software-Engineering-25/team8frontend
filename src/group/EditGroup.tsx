@@ -56,7 +56,7 @@ const addRoleToGroup = async (
 ): Promise<void> => {
   console.log(`API CALL: Füge Rolle '${roleId}' zu Gruppe '${groupId}' hinzu.`);
   const response = await fetch(
-    `${window.API_BASE_URL}/groups/${groupId}/permissions`,
+    `${window.API_BASE_URL}/groups/${encodeURIComponent(groupId)}/permissions`,
     {
       method: 'POST',
       headers: {
@@ -79,7 +79,7 @@ const removeRoleFromGroup = async (
 ): Promise<void> => {
   console.log(`API CALL: Entferne Rolle '${roleId}' von Gruppe '${groupId}'.`);
   const response = await fetch(
-    `${window.API_BASE_URL}/groups/${groupId}/permissions`,
+    `${window.API_BASE_URL}/groups/${encodeURIComponent(groupId)}/permissions`,
     {
       method: 'DELETE',
       headers: {
@@ -118,7 +118,7 @@ const updateGroupName = async (
   console.log(
     `API CALL: Ändere Namen von Gruppe '${groupId}' zu '${newName}'.`
   );
-  const url = `${window.API_BASE_URL}/groups/${groupId}`;
+  const url = `${window.API_BASE_URL}/groups/${encodeURIComponent(groupId)}`;
 
   const response = await fetch(url, {
     method: 'PUT',
