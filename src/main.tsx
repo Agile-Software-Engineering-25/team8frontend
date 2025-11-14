@@ -3,23 +3,29 @@ import './index.css';
 import App from './App';
 
 declare global {
+  interface ImportMetaEnv {
+    readonly VITE_BACKEND_BASE_URL?: string;
+  }
+  interface ImportMeta {
+    readonly env: ImportMetaEnv;
+  }
   interface Window {
     API_BASE_URL: string;
   }
 }
 
 const defaultBase = '/api/ase-08';
-const fromEnv = import.meta.env.VITE_BACKEND_BASE_URL;
+const fromVite = import.meta.env?.VITE_BACKEND_BASE_URL;
 
-window.API_BASE_URL = (fromEnv ?? defaultBase).replace(/\/+$/, '');
+window.API_BASE_URL = (fromVite ?? defaultBase).replace(/\/+$/, '');
 
 if (!window.API_BASE_URL) {
-  console.error('API_BASE_URL is not set');
+  console.error('API_BASE_URL ist nicht gesetzt.');
 }
 
-const root = document.getElementById('root');
-if (!root) {
-  throw new Error("Root element with id 'root' not found");
+const rootEl = document.getElementById('root');
+if (!rootEl) {
+  throw new Error('Root-Element #root nicht gefunden.');
 }
 
 ReactDOM.createRoot(container).render(<App />);

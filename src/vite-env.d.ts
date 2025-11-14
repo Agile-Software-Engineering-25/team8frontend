@@ -1,10 +1,7 @@
 /// <reference types="vite/client" />
-export{};
-
-interface ImportMetaEnv {
-  readonly VITE_BACKEND_BASE_URL?: string;
+declare global {
+  interface Window {
+    API_BASE_URL: string;
+  }
 }
-
-interface ImportMeta {
-    readonly env: ImportMetaEnv;
-}
+export {};
