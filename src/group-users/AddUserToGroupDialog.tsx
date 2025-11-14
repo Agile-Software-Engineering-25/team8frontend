@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import './AddUserToGroupDialog.css';
 
-// --- ICON ---
 const CloseIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -19,67 +18,146 @@ const CloseIcon = () => (
   </svg>
 );
 
-// --- MOCK API ---
-// GET /api/users
-const getAllAvailableUsers = async () => {
-  console.log('Mock-API call → getAllAvailableUsers');
+interface User {
+  id: string;
+  username: string;
+  email: string;
+  enabled: boolean;
+}
 
-  const mockAllUsers = [
-    { id: '10', username: 'anna.m', email: 'anna.m@example.com' },
-    { id: '11', username: 'marco.r', email: 'marco.r@example.com' },
-    { id: '12', username: 'julia.b', email: 'julia.b@example.com' },
-    { id: '13', username: 'max.s', email: 'max.s@example.com' },
-    { id: '14', username: 'frank.t', email: 'frank.t@example.com' },
-  ];
+const getAllAvailableUsers = async (): Promise<User[]> => {
+  console.log('Real-API call → getAllAvailableUsers');
+  const url = 'http://localhost:8080/api/ase-08/users?first=0&max=999999';
 
-  return new Promise<typeof mockAllUsers>((resolve) =>
-    setTimeout(() => resolve(mockAllUsers), 300)
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      accept: '*/*',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Fehler beim Laden der verfügbaren Benutzer.');
+  }
+  return response.json();
+};
+
+const addUserToGroup = async (groupId: string, userId: string) => {
+  console.log(
+    `Real-API call → addUserToGroup (User: ${userId}, Group: ${groupId})`
   );
+  const url = `http://localhost:8080/api/ase-08/groups/${groupId}/users`;
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      accept: '*/*',
+    },
+    body: JSON.stringify({
+      userIds: [userId],
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error('Fehler beim Hinzufügen des Benutzers zur Gruppe.');
+  }
+  return true;
 };
 
 interface Props {
+  groupId: string;
+  existingUsers: User[];
   onClose: () => void;
-  onAdd: (user: any) => void;
+  onAdd: (user: User) => void;
 }
 
-export const AddUserToGroupDialog: React.FC<Props> = ({ onClose, onAdd }) => {
-  const [allUsers, setAllUsers] = useState<any[]>([]);
+export const AddUserToGroupDialog: React.FC<Props> = ({
+  groupId,
+  existingUsers,
+  onClose,
+  onAdd,
+}) => {
+  const [allUsers, setAllUsers] = useState<User[]>([]);
   const [search, setSearch] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [loadingList, setLoadingList] = useState(true);
+
+  const [isAdding, setIsAdding] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const load = async () => {
-      const data = await getAllAvailableUsers();
-      setAllUsers(data);
-      setLoading(false);
+      try {
+        setLoadingList(true);
+        const data = await getAllAvailableUsers();
+        setAllUsers(data);
+      } catch (err) {
+        setError('Benutzerliste konnte nicht geladen werden.');
+      } finally {
+        setLoadingList(false);
+      }
     };
     load();
   }, []);
 
-  const filtered = allUsers.filter(
-    (u) =>
-      u.username.toLowerCase().includes(search.toLowerCase()) ||
-      u.email.toLowerCase().includes(search.toLowerCase())
-  );
+  const handleAddClick = async (user: User) => {
+    if (isAdding) return;
+
+    setIsAdding(true);
+    setError(null);
+
+    try {
+      await addUserToGroup(groupId, user.id);
+      onAdd(user);
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message || 'Ein Fehler ist aufgetreten.');
+    } finally {
+      setIsAdding(false);
+    }
+  };
+
+  const availableUsers = useMemo(() => {
+    const existingUserIds = new Set(existingUsers.map((u) => u.id));
+    return allUsers.filter((u) => !existingUserIds.has(u.id));
+  }, [allUsers, existingUsers]);
+
+  const filtered = availableUsers.filter((u) => {
+    const searchLower = search.toLowerCase();
+
+    const usernameMatch = (u.username || '')
+      .toLowerCase()
+      .includes(searchLower);
+    const emailMatch = (u.email || '').toLowerCase().includes(searchLower);
+
+    return usernameMatch || emailMatch;
+  });
 
   return (
     <div className="dialog-overlay">
       <div className="dialog-content">
         <div className="dialog-header">
           <h2>Benutzer hinzufügen</h2>
-          <button className="dialog-close" onClick={onClose}>
+          <button
+            className="dialog-close"
+            onClick={onClose}
+            disabled={isAdding}
+          >
             <CloseIcon />
           </button>
         </div>
+
+        {error && <p className="dialog-error">{error}</p>}
 
         <input
           className="search-list-input"
           placeholder="Benutzer suchen..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
+          disabled={isAdding}
         />
 
-        {loading ? (
+        {loadingList ? (
           <p>Benutzer werden geladen...</p>
         ) : (
           <div className="user-list-scroll">
@@ -88,14 +166,19 @@ export const AddUserToGroupDialog: React.FC<Props> = ({ onClose, onAdd }) => {
               <div
                 key={u.id}
                 className="role-item"
-                onClick={() => onAdd(u)}
-                style={{ cursor: 'pointer' }}
+                onClick={() => handleAddClick(u)}
+                style={{
+                  cursor: isAdding ? 'wait' : 'pointer',
+                  opacity: isAdding ? 0.7 : 1,
+                }}
               >
                 <strong>{u.username}</strong> – {u.email}
               </div>
             ))}
           </div>
         )}
+
+        {isAdding && <p>Benutzer wird hinzugefügt...</p>}
       </div>
     </div>
   );

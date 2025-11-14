@@ -7,6 +7,8 @@ import { GroupUserList } from './group-users/GroupUserList.tsx';
 
 import './index.css';
 
+window.API_BASE_URL = 'http://localhost:8080/api/ase-08';
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
     <Routes>

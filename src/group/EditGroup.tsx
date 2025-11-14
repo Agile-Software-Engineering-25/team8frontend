@@ -4,41 +4,53 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import type { DropResult } from 'react-beautiful-dnd';
 import './EditGroup.css';
 
-// --- INTERFACES ---
 interface Role {
+  id: string;
+  name: string;
+  userCount?: number;
+}
+
+interface Group {
   id: string;
   name: string;
 }
 
-// --- MOCK API FUNCTIONS ---
+interface GroupDetails {
+  id: string;
+  name: string;
+  permissions: Role[];
+  attributes: { [key: string]: string };
+}
 
 const fetchAllRoles = async (): Promise<Role[]> => {
   console.log('Lade alle verfügbaren Rollen...');
-  const allRoles: Role[] = [
-    { id: 'role-1', name: 'Benutzer erstellen' },
-    { id: 'role-2', name: 'Benutzer löschen' },
-    { id: 'role-3', name: 'Artikel veröffentlichen' },
-    { id: 'role-4', name: 'Artikel bearbeiten' },
-    { id: 'role-5', name: 'Kommentare moderieren' },
-    { id: 'role-6', name: 'Dashboard ansehen' },
-    { id: 'role-7', name: 'Einstellungen ändern' },
-    { id: 'role-8', name: 'Berichte exportieren' },
-  ];
-  return new Promise((resolve) => setTimeout(() => resolve(allRoles), 300));
+  const response = await fetch('http://localhost:8080/api/ase-08/roles', {
+    method: 'GET',
+    headers: {
+      accept: '*/*',
+    },
+  });
+  if (!response.ok) {
+    throw new Error('Rollen konnten nicht geladen werden.');
+  }
+  return response.json();
 };
 
-const fetchGroupDetails = async (groupId: string) => {
+const fetchGroupDetails = async (groupId: string): Promise<GroupDetails> => {
   console.log(`Lade Details für Gruppe ${groupId}...`);
-  const mockGroup = {
-    id: parseInt(groupId),
-    name: `Informatik Gruppe F-${groupId}`,
-    assignedRoleIds: ['role-3', 'role-4', 'role-6'],
-  };
-  return new Promise<{
-    id: number;
-    name: string;
-    assignedRoleIds: string[];
-  }>((resolve) => setTimeout(() => resolve(mockGroup), 500));
+  const response = await fetch(
+    `http://localhost:8080/api/ase-08/groups/${groupId}`,
+    {
+      method: 'GET',
+      headers: {
+        accept: '*/*',
+      },
+    }
+  );
+  if (!response.ok) {
+    throw new Error('Gruppendetails konnten nicht geladen werden.');
+  }
+  return response.json();
 };
 
 const addRoleToGroup = async (
@@ -46,7 +58,22 @@ const addRoleToGroup = async (
   roleId: string
 ): Promise<void> => {
   console.log(`API CALL: Füge Rolle '${roleId}' zu Gruppe '${groupId}' hinzu.`);
-  return new Promise((resolve) => setTimeout(resolve, 400));
+  const response = await fetch(
+    `http://localhost:8080/api/ase-08/groups/${groupId}/permissions`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        accept: '*/*',
+      },
+      body: JSON.stringify({
+        permissionIds: [roleId],
+      }),
+    }
+  );
+  if (!response.ok) {
+    throw new Error('Rolle konnte nicht hinzugefügt werden.');
+  }
 };
 
 const removeRoleFromGroup = async (
@@ -54,16 +81,65 @@ const removeRoleFromGroup = async (
   roleId: string
 ): Promise<void> => {
   console.log(`API CALL: Entferne Rolle '${roleId}' von Gruppe '${groupId}'.`);
-  return new Promise((resolve) => setTimeout(resolve, 400));
+  const response = await fetch(
+    `http://localhost:8080/api/ase-08/groups/${groupId}/permissions`,
+    {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        accept: '*/*',
+      },
+      body: JSON.stringify({
+        permissionIds: [roleId],
+      }),
+    }
+  );
+  if (!response.ok) {
+    throw new Error('Rolle konnte nicht entfernt werden.');
+  }
 };
 
-const fetchStandardGroups = async (): Promise<string[]> => {
-  console.log('Lade verfügbare StandardGruppen...');
-  const Groups = ['Administrator', 'PR', 'Student', 'Dozent', 'Redakteur'];
-  return new Promise((resolve) => setTimeout(() => resolve(Groups), 200));
+const fetchAllGroups = async (): Promise<Group[]> => {
+  console.log('Lade verfügbare StandardGruppen (alle Gruppen)...');
+  const response = await fetch('http://localhost:8080/api/ase-08/groups', {
+    method: 'GET',
+    headers: {
+      accept: '*/*',
+    },
+  });
+  if (!response.ok) {
+    throw new Error('Gruppenliste konnte nicht geladen werden.');
+  }
+  return response.json();
 };
 
-// --- HELPER COMPONENTS ---
+const updateGroupName = async (
+  groupId: string,
+  newName: string,
+  currentAttributes: { [key: string]: string }
+): Promise<void> => {
+  console.log(
+    `API CALL: Ändere Namen von Gruppe '${groupId}' zu '${newName}'.`
+  );
+  const url = `http://localhost:8080/api/ase-08/groups/${groupId}`;
+
+  const response = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      accept: '*/*',
+    },
+    body: JSON.stringify({
+      name: newName,
+      attributes: currentAttributes,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error('Gruppenname konnte nicht geändert werden.');
+  }
+};
+
 const ArrowLeftIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -81,56 +157,60 @@ const ArrowLeftIcon = () => (
   </svg>
 );
 
-// --- MAIN COMPONENT ---
 export const EditGroupPage: React.FC = () => {
   const { groupId } = useParams<{ groupId: string }>();
   const isNewGroup = groupId === 'new';
 
-  const [GroupName, setGroupName] = useState('');
+  const [groupName, setGroupName] = useState('');
+  const [attributes, setAttributes] = useState<{ [key: string]: string }>({}); // NEU
   const [assigned, setAssigned] = useState<Role[]>([]);
   const [available, setAvailable] = useState<Role[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false); // NEU
   const [assignedSearch, setAssignedSearch] = useState('');
   const [availableSearch, setAvailableSearch] = useState('');
-  const [standardGroups, setStandardGroups] = useState<string[]>([]);
-  const [selectedStandardGroup, setSelectedStandardGroup] = useState('');
+
+  const [allGroups, setAllGroups] = useState<Group[]>([]);
+  const [selectedGroupId, setSelectedGroupId] = useState('');
 
   useEffect(() => {
     const loadData = async () => {
-      console.log(
-        'loadData() called with groupId =',
-        groupId,
-        'isNewGroup =',
-        isNewGroup
-      );
       setLoading(true);
-      if (isNewGroup) {
-        const [allRoles, standardGroupsData] = await Promise.all([
-          fetchAllRoles(),
-          fetchStandardGroups(),
-        ]);
-        setAvailable(allRoles);
-        setAssigned([]);
-        setGroupName('');
-        setStandardGroups(standardGroupsData);
-        if (standardGroupsData.length > 0) {
-          setSelectedStandardGroup(standardGroupsData[0]);
+      try {
+        if (isNewGroup) {
+          const [allRoles, allGroupsData] = await Promise.all([
+            fetchAllRoles(),
+            fetchAllGroups(),
+          ]);
+          setAvailable(allRoles);
+          setAssigned([]);
+          setGroupName('');
+          setAttributes({});
+          setAllGroups(allGroupsData);
+          if (allGroupsData.length > 0) {
+            setSelectedGroupId(allGroupsData[0].id);
+          }
+        } else if (groupId) {
+          const [allRoles, groupDetails] = await Promise.all([
+            fetchAllRoles(),
+            fetchGroupDetails(groupId),
+          ]);
+
+          setGroupName(groupDetails.name);
+          setAttributes(groupDetails.attributes || {});
+
+          const assignedRoles = groupDetails.permissions;
+          const assignedRoleIds = new Set(assignedRoles.map((p) => p.id));
+
+          const availableRoles = allRoles.filter(
+            (p) => !assignedRoleIds.has(p.id)
+          );
+
+          setAssigned(assignedRoles);
+          setAvailable(availableRoles);
         }
-      } else if (groupId) {
-        // Modus: Bestehende Gruppe bearbeiten
-        const [allRoles, GroupDetails] = await Promise.all([
-          fetchAllRoles(),
-          fetchGroupDetails(groupId),
-        ]);
-        setGroupName(GroupDetails.name);
-        const assignedRoles = allRoles.filter((p) =>
-          GroupDetails.assignedRoleIds.includes(p.id)
-        );
-        const availableRoles = allRoles.filter(
-          (p) => !GroupDetails.assignedRoleIds.includes(p.id)
-        );
-        setAssigned(assignedRoles);
-        setAvailable(availableRoles);
+      } catch (error) {
+        console.error('Fehler beim Laden der Daten:', error);
       }
       setLoading(false);
     };
@@ -176,14 +256,32 @@ export const EditGroupPage: React.FC = () => {
     }
   };
 
+  const handleSave = async () => {
+    if (isNewGroup) {
+      console.log('Erstelle Gruppe...', groupName, selectedGroupId, assigned);
+      return;
+    }
+
+    if (groupId) {
+      setIsSaving(true);
+      try {
+        await updateGroupName(groupId, groupName, attributes);
+        console.log('Name erfolgreich geändert!');
+      } catch (error) {
+        console.error('Fehler beim Ändern des Namens:', error);
+      } finally {
+        setIsSaving(false);
+      }
+    }
+  };
+
   if (loading) return <div>Lade Details...</div>;
 
-  // Gefilterte Listen für die Anzeige
   const filteredAssigned = assigned.filter((p) =>
-    p.name.toLowerCase().includes(assignedSearch.toLowerCase())
+    (p.name || '').toLowerCase().includes(assignedSearch.toLowerCase())
   );
   const filteredAvailable = available.filter((p) =>
-    p.name.toLowerCase().includes(availableSearch.toLowerCase())
+    (p.name || '').toLowerCase().includes(availableSearch.toLowerCase())
   );
 
   return (
@@ -196,19 +294,18 @@ export const EditGroupPage: React.FC = () => {
           <h1>{isNewGroup ? 'Neue Gruppe erstellen' : 'Gruppe bearbeiten'}</h1>
         </div>
 
-        {/* --- Wrapper für die Aktionen rechts --- */}
         <div className="header-actions">
           {isNewGroup && (
             <div className="standard-group-selector">
               <label htmlFor="standard-group">StandardGruppe</label>
               <select
                 id="standard-group"
-                value={selectedStandardGroup}
-                onChange={(e) => setSelectedStandardGroup(e.target.value)}
+                value={selectedGroupId}
+                onChange={(e) => setSelectedGroupId(e.target.value)}
               >
-                {standardGroups.map((group) => (
-                  <option key={group} value={group}>
-                    {group}
+                {allGroups.map((group) => (
+                  <option key={group.id} value={group.id}>
+                    {group.name}
                   </option>
                 ))}
               </select>
@@ -216,16 +313,24 @@ export const EditGroupPage: React.FC = () => {
           )}
           <input
             type="text"
-            value={GroupName}
+            value={groupName}
             onChange={(e) => setGroupName(e.target.value)}
             placeholder={isNewGroup ? 'Name der neuen Gruppe' : ''}
             className="group-name-input"
+            disabled={isSaving}
           />
-          <button className="btn btn-primary">
-            {isNewGroup ? 'Gruppe erstellen' : 'Änderungen speichern'}
+          <button
+            className="btn btn-primary"
+            onClick={handleSave}
+            disabled={isSaving}
+          >
+            {isSaving
+              ? 'Wird gespeichert...'
+              : isNewGroup
+                ? 'Gruppe erstellen'
+                : 'Name Ändern'}
           </button>
         </div>
-        {/* --- Ende des Wrappers --- */}
       </div>
 
       <DragDropContext onDragEnd={onDragEnd}>

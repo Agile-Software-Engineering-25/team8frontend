@@ -43,3 +43,27 @@
 .error {
   color: #b00020;
 }
+
+.btn-icon {
+  background: none;
+  border: none;
+  padding: 4px; /* Gibt dem Icon etwas Klickfläche */
+  cursor: pointer;
+  border-radius: 50%; /* Macht den Hover-Effekt rund */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.btn-icon:hover {
+  background-color: #f0f0f0; /* Leichtes Grau */
+}
+
+.btn-icon.btn-icon-danger svg {
+  stroke: #dc3545; /* Rote Farbe (Bootstrap "danger" rot) */
+}
+
+.btn-icon.btn-icon-danger:hover {
+  background-color: #f8d7da; /* Sehr helles Rot */
+}
