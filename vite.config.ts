@@ -34,6 +34,8 @@ export default defineConfig(({ command }) => ({
       '@hooks': path.resolve(__dirname, './src/hooks'),
       '@assets': path.resolve(__dirname, './src/assets'),
       '@stores': path.resolve(__dirname, './src/stores'),
+      '@constants': path.resolve(__dirname, './src/constants'),
+      '@context': path.resolve(__dirname, './src/context')
     },
   },
   build: {
