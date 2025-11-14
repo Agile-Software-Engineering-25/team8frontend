@@ -38,15 +38,12 @@ const fetchAllRoles = async (): Promise<Role[]> => {
 
 const fetchGroupDetails = async (groupId: string): Promise<GroupDetails> => {
   console.log(`Lade Details für Gruppe ${groupId}...`);
-  const response = await fetch(
-    ``${window.API_BASE_URL}/groups/${groupId}`,`
-    {
-      method: 'GET',
-      headers: {
-        accept: '*/*',
-      },
-    }
-  );
+  const response = await fetch(`${window.API_BASE_URL}/groups/${groupId}`, {
+    method: 'GET',
+    headers: {
+      Accept: '*/*',
+    },
+  });
   if (!response.ok) {
     throw new Error('Gruppendetails konnten nicht geladen werden.');
   }
