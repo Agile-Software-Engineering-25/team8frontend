@@ -27,7 +27,7 @@ interface User {
 
 const getAllAvailableUsers = async (): Promise<User[]> => {
   console.log('Real-API call → getAllAvailableUsers');
-  const url = 'http://localhost:8080/api/ase-08/users?first=0&max=999999';
+  const url = `${window.API_BASE_URL}/users?first=0&max=999999`;
 
   const response = await fetch(url, {
     method: 'GET',
@@ -46,7 +46,7 @@ const addUserToGroup = async (groupId: string, userId: string) => {
   console.log(
     `Real-API call → addUserToGroup (User: ${userId}, Group: ${groupId})`
   );
-  const url = `http://localhost:8080/api/ase-08/groups/${groupId}/users`;
+  const url = `${window.API_BASE_URL}/groups/${groupId}/users`;
 
   const response = await fetch(url, {
     method: 'POST',

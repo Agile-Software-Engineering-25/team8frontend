@@ -1,5 +1,8 @@
 /// <reference types="vite/client" />
 
-interface Window {
-  API_BASE_URL: string;
+declare global {
+  interface Window {
+    API_BASE_URL: string;
+  }
 }
+export {};
