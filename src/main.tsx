@@ -28,4 +28,4 @@ if (!rootEl) {
   throw new Error('Root-Element #root nicht gefunden.');
 }
 
-ReactDOM.createRoot(container).render(<App />);
+ReactDOM.createRoot(rootEl).render(<App />);
