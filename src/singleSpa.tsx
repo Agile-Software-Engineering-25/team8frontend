@@ -6,6 +6,7 @@ import type { User } from 'oidc-client-ts';
 import { AuthProvider } from '@context/AuthContext';
 import type { AppProps } from 'single-spa';
 import App from './App';
+import './initApiBase';
 
 type RootProps = {
   getUser?: () => User | null;
