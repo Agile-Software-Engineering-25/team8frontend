@@ -4,9 +4,13 @@ import { Startseite } from './MainPage.tsx';
 import { EditGroupPage } from './group/EditGroup.tsx';
 import { GroupUserList } from './group-users/GroupUserList.tsx';
 
-const App = () => {
+type AppProps = {
+  basename?: string;
+};
+
+const App = (props: AppProps) => {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={props.basename ?? '/'}>
       <Routes>
         <Route path="/" element={<Startseite />} />
         <Route path="/group/:groupId" element={<EditGroupPage />} />
