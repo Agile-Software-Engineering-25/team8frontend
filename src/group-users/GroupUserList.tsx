@@ -49,7 +49,7 @@ interface User {
 const getAllUsersByGroup = async (groupId: string): Promise<User[]> => {
   console.log('Real-API call → getAllUsersByGroup', groupId);
 
-  const url = `${window.API_BASE_URL}/groups/${groupId}/users?first=0&max=100`;
+  const url = `${window.API_BASE_URL}/groups/${encodeURIComponent(groupId)}/users?first=0&max=100`;
 
   const response = await fetch(url, {
     method: 'GET',
@@ -70,7 +70,7 @@ const removeUserFromGroup = async (
   userId: string,
   groupId: string
 ): Promise<void> => {
-  const url = `${window.API_BASE_URL}/users/${userId}/groups/${groupId}`;
+  const url = `${window.API_BASE_URL}/users/${encodeURIComponent(userId)}/groups/${encodeURIComponent(groupId)}`;
 
   const response = await fetch(url, {
     method: 'DELETE',

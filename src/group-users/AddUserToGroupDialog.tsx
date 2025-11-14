@@ -46,7 +46,7 @@ const addUserToGroup = async (groupId: string, userId: string) => {
   console.log(
     `Real-API call → addUserToGroup (User: ${userId}, Group: ${groupId})`
   );
-  const url = `${window.API_BASE_URL}/groups/${groupId}/users`;
+  const url = `${window.API_BASE_URL}/groups/${encodeURIComponent(groupId)}/users`;
 
   const response = await fetch(url, {
     method: 'POST',
