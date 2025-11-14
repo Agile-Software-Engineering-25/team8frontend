@@ -68,9 +68,8 @@ const getAllUsersByGroup = async (groupId: string): Promise<User[]> => {
 
 const removeUserFromGroup = async (
   userId: string,
-  groupId: string,
+  groupId: string
 ): Promise<void> => {
-
   const url = `http://localhost:8080/api/ase-08/users/${userId}/groups/${groupId}`;
 
   const response = await fetch(url, {
@@ -147,7 +146,7 @@ export const GroupUserList: React.FC = () => {
     } catch (err) {
       console.error('Fehler beim Entfernen des Benutzers:', err);
       alert(
-        'Der Benutzer konnte nicht entfernt werden. Bitte versuchen Sie es erneut.',
+        'Der Benutzer konnte nicht entfernt werden. Bitte versuchen Sie es erneut.'
       );
     }
   };

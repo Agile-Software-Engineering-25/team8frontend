@@ -43,7 +43,9 @@ const getAllAvailableUsers = async (): Promise<User[]> => {
 };
 
 const addUserToGroup = async (groupId: string, userId: string) => {
-  console.log(`Real-API call → addUserToGroup (User: ${userId}, Group: ${groupId})`);
+  console.log(
+    `Real-API call → addUserToGroup (User: ${userId}, Group: ${groupId})`
+  );
   const url = `http://localhost:8080/api/ase-08/groups/${groupId}/users`;
 
   const response = await fetch(url, {
@@ -79,7 +81,7 @@ export const AddUserToGroupDialog: React.FC<Props> = ({
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const [search, setSearch] = useState('');
   const [loadingList, setLoadingList] = useState(true);
-  
+
   const [isAdding, setIsAdding] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -116,15 +118,16 @@ export const AddUserToGroupDialog: React.FC<Props> = ({
   };
 
   const availableUsers = useMemo(() => {
-    const existingUserIds = new Set(existingUsers.map(u => u.id));
-    return allUsers.filter(u => !existingUserIds.has(u.id));
+    const existingUserIds = new Set(existingUsers.map((u) => u.id));
+    return allUsers.filter((u) => !existingUserIds.has(u.id));
   }, [allUsers, existingUsers]);
-
 
   const filtered = availableUsers.filter((u) => {
     const searchLower = search.toLowerCase();
-    
-    const usernameMatch = (u.username || '').toLowerCase().includes(searchLower);
+
+    const usernameMatch = (u.username || '')
+      .toLowerCase()
+      .includes(searchLower);
     const emailMatch = (u.email || '').toLowerCase().includes(searchLower);
 
     return usernameMatch || emailMatch;
@@ -135,7 +138,11 @@ export const AddUserToGroupDialog: React.FC<Props> = ({
       <div className="dialog-content">
         <div className="dialog-header">
           <h2>Benutzer hinzufügen</h2>
-          <button className="dialog-close" onClick={onClose} disabled={isAdding}>
+          <button
+            className="dialog-close"
+            onClick={onClose}
+            disabled={isAdding}
+          >
             <CloseIcon />
           </button>
         </div>
@@ -160,7 +167,10 @@ export const AddUserToGroupDialog: React.FC<Props> = ({
                 key={u.id}
                 className="role-item"
                 onClick={() => handleAddClick(u)}
-                style={{ cursor: isAdding ? 'wait' : 'pointer', opacity: isAdding ? 0.7 : 1 }}
+                style={{
+                  cursor: isAdding ? 'wait' : 'pointer',
+                  opacity: isAdding ? 0.7 : 1,
+                }}
               >
                 <strong>{u.username}</strong> – {u.email}
               </div>

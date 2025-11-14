@@ -9,7 +9,6 @@ const PORT = parseInt(process.env.PORT ?? '5173');
 
 const ENTRY_POINT = 'src/singleSpa.tsx';
 
-
 const NPM_EXTERNALS: string[] = [];
 
 // https://vite.dev/config/
@@ -35,7 +34,7 @@ export default defineConfig(({ command }) => ({
       '@assets': path.resolve(__dirname, './src/assets'),
       '@stores': path.resolve(__dirname, './src/stores'),
       '@constants': path.resolve(__dirname, './src/constants'),
-      '@context': path.resolve(__dirname, './src/context')
+      '@context': path.resolve(__dirname, './src/context'),
     },
   },
   build: {

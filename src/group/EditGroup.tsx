@@ -118,7 +118,9 @@ const updateGroupName = async (
   newName: string,
   currentAttributes: { [key: string]: string }
 ): Promise<void> => {
-  console.log(`API CALL: Ändere Namen von Gruppe '${groupId}' zu '${newName}'.`);
+  console.log(
+    `API CALL: Ändere Namen von Gruppe '${groupId}' zu '${newName}'.`
+  );
   const url = `http://localhost:8080/api/ase-08/groups/${groupId}`;
 
   const response = await fetch(url, {
@@ -167,7 +169,7 @@ export const EditGroupPage: React.FC = () => {
   const [isSaving, setIsSaving] = useState(false); // NEU
   const [assignedSearch, setAssignedSearch] = useState('');
   const [availableSearch, setAvailableSearch] = useState('');
-  
+
   const [allGroups, setAllGroups] = useState<Group[]>([]);
   const [selectedGroupId, setSelectedGroupId] = useState('');
 
@@ -193,22 +195,22 @@ export const EditGroupPage: React.FC = () => {
             fetchAllRoles(),
             fetchGroupDetails(groupId),
           ]);
-          
+
           setGroupName(groupDetails.name);
           setAttributes(groupDetails.attributes || {});
-          
+
           const assignedRoles = groupDetails.permissions;
-          const assignedRoleIds = new Set(assignedRoles.map(p => p.id));
-          
+          const assignedRoleIds = new Set(assignedRoles.map((p) => p.id));
+
           const availableRoles = allRoles.filter(
             (p) => !assignedRoleIds.has(p.id)
           );
-          
+
           setAssigned(assignedRoles);
           setAvailable(availableRoles);
         }
       } catch (error) {
-        console.error("Fehler beim Laden der Daten:", error);
+        console.error('Fehler beim Laden der Daten:', error);
       }
       setLoading(false);
     };
@@ -273,7 +275,6 @@ export const EditGroupPage: React.FC = () => {
     }
   };
 
-
   if (loading) return <div>Lade Details...</div>;
 
   const filteredAssigned = assigned.filter((p) =>
@@ -326,8 +327,8 @@ export const EditGroupPage: React.FC = () => {
             {isSaving
               ? 'Wird gespeichert...'
               : isNewGroup
-              ? 'Gruppe erstellen'
-              : 'Name Ändern'}
+                ? 'Gruppe erstellen'
+                : 'Name Ändern'}
           </button>
         </div>
       </div>

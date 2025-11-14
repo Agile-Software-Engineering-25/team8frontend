@@ -5,7 +5,7 @@ export interface UserGroup {
   id: number;
   name: string;
   memberCount: number;
-  parentName: string
+  parentName: string;
 }
 
 interface GroupCardProps {

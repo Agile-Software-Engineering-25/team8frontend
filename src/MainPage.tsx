@@ -17,21 +17,19 @@ const fetchGroupsFromBackend = async (): Promise<UserGroup[]> => {
     }
 
     const data: UserGroup[] = await response.json();
-    const processedData: UserGroup[] = data.map(group => {
+    const processedData: UserGroup[] = data.map((group) => {
       return {
         ...group,
-        parentName: group.parentName ?? "Keine Übergruppe"
+        parentName: group.parentName ?? 'Keine Übergruppe',
       };
     });
 
     return processedData;
-
   } catch (error) {
     console.error('Fehler beim Abrufen der Gruppen:', error);
     return [];
   }
 };
-
 
 export const Startseite: React.FC = () => {
   const [Groups, setGroups] = useState<UserGroup[]>([]);
@@ -80,14 +78,13 @@ export const Startseite: React.FC = () => {
     });
 
     return filtered;
-
   }, [searchTerm, sortOrder, Groups]);
 
   const handleCreateNewGroup = () => {
     navigate('/group/new');
   };
   const handleToggleSortOrder = () => {
-    setSortOrder(prevOrder => (prevOrder === 'asc' ? 'desc' : 'asc'));
+    setSortOrder((prevOrder) => (prevOrder === 'asc' ? 'desc' : 'asc'));
   };
 
   return (
@@ -101,7 +98,8 @@ export const Startseite: React.FC = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         <button onClick={handleToggleSortOrder} className="btn">
-          Sortieren: {sortOrder === 'asc' ? 'Aufsteigend (A-Z)' : 'Absteigend (Z-A)'}
+          Sortieren:{' '}
+          {sortOrder === 'asc' ? 'Aufsteigend (A-Z)' : 'Absteigend (Z-A)'}
         </button>
 
         <button onClick={handleCreateNewGroup} className="btn btn-primary">
