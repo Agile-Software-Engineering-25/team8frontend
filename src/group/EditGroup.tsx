@@ -38,11 +38,15 @@ const fetchGroupDetails = async (groupId: string): Promise<GroupDetails> => {
     method: 'GET',
     headers: { Accept: '*/*' },
   });
-  if (!response.ok) throw new Error('Gruppendetails konnten nicht geladen werden.');
+  if (!response.ok)
+    throw new Error('Gruppendetails konnten nicht geladen werden.');
   return response.json();
 };
 
-const addRoleToGroup = async (groupId: string, roleId: string): Promise<void> => {
+const addRoleToGroup = async (
+  groupId: string,
+  roleId: string
+): Promise<void> => {
   console.log(`API CALL: Füge Rolle '${roleId}' zu Gruppe '${groupId}' hinzu.`);
   const response = await fetch(
     `${window.API_BASE_URL}/groups/${encodeURIComponent(groupId)}/permissions`,
@@ -55,7 +59,10 @@ const addRoleToGroup = async (groupId: string, roleId: string): Promise<void> =>
   if (!response.ok) throw new Error('Rolle konnte nicht hinzugefügt werden.');
 };
 
-const removeRoleFromGroup = async (groupId: string, roleId: string): Promise<void> => {
+const removeRoleFromGroup = async (
+  groupId: string,
+  roleId: string
+): Promise<void> => {
   console.log(`API CALL: Entferne Rolle '${roleId}' von Gruppe '${groupId}'.`);
   const response = await fetch(
     `${window.API_BASE_URL}/groups/${encodeURIComponent(groupId)}/permissions`,
@@ -74,7 +81,8 @@ const fetchAllGroups = async (): Promise<Group[]> => {
     method: 'GET',
     headers: { accept: '*/*' },
   });
-  if (!response.ok) throw new Error('Gruppenliste konnte nicht geladen werden.');
+  if (!response.ok)
+    throw new Error('Gruppenliste konnte nicht geladen werden.');
   return response.json();
 };
 
@@ -83,23 +91,31 @@ const updateGroupName = async (
   newName: string,
   currentAttributes: { [key: string]: string }
 ): Promise<void> => {
-  console.log(`API CALL: Ändere Namen von Gruppe '${groupId}' zu '${newName}'.`);
+  console.log(
+    `API CALL: Ändere Namen von Gruppe '${groupId}' zu '${newName}'.`
+  );
   const url = `${window.API_BASE_URL}/groups/${encodeURIComponent(groupId)}`;
   const response = await fetch(url, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json', accept: '*/*' },
     body: JSON.stringify({ name: newName, attributes: currentAttributes }),
   });
-  if (!response.ok) throw new Error('Gruppenname konnte nicht geändert werden.');
+  if (!response.ok)
+    throw new Error('Gruppenname konnte nicht geändert werden.');
 };
 
 const searchGroupByName = async (name: string): Promise<GroupDetails> => {
-  console.log(`API CALL: Suche Gruppe mit Namen '${name}' um ID zu erhalten...`);
-  const response = await fetch(`${window.API_BASE_URL}/groups/search?name=${encodeURIComponent(name)}`, {
-    method: 'GET',
-    headers: { accept: '*/*' },
-  });
-  
+  console.log(
+    `API CALL: Suche Gruppe mit Namen '${name}' um ID zu erhalten...`
+  );
+  const response = await fetch(
+    `${window.API_BASE_URL}/groups/search?name=${encodeURIComponent(name)}`,
+    {
+      method: 'GET',
+      headers: { accept: '*/*' },
+    }
+  );
+
   if (!response.ok) {
     throw new Error('Gruppe konnte nicht gefunden werden.');
   }
@@ -119,7 +135,7 @@ const createChildGroup = async (
       headers: { 'Content-Type': 'application/json', accept: '*/*' },
       body: JSON.stringify({
         name: name,
-        attributes: attributes
+        attributes: attributes,
       }),
     }
   );
@@ -129,7 +145,6 @@ const createChildGroup = async (
   }
   return response.json();
 };
-
 
 const ArrowLeftIcon = () => (
   <svg
@@ -189,8 +204,8 @@ export const EditGroupPage: React.FC = () => {
           setGroupName(groupDetails.name || ''); // FIX: Fallback für Name
           setAttributes(groupDetails.attributes || {}); // FIX: Fallback für Attributes
 
-          const assignedRoles = groupDetails.permissions || []; 
-          
+          const assignedRoles = groupDetails.permissions || [];
+
           const assignedRoleIds = new Set(assignedRoles.map((p) => p.id));
 
           const availableRoles = allRoles.filter(
@@ -252,19 +267,26 @@ export const EditGroupPage: React.FC = () => {
     try {
       if (isNewGroup) {
         console.log('Erstelle neue Gruppe...');
-        
-        const selectedGroupObj = allGroups.find(g => g.id === selectedGroupId);
+
+        const selectedGroupObj = allGroups.find(
+          (g) => g.id === selectedGroupId
+        );
         if (!selectedGroupObj) {
-          throw new Error("Keine Elterngruppe ausgewählt.");
+          throw new Error('Keine Elterngruppe ausgewählt.');
         }
 
-        const parentGroupDetails = await searchGroupByName(selectedGroupObj.name);
+        const parentGroupDetails = await searchGroupByName(
+          selectedGroupObj.name
+        );
         const parentIdFromSearch = parentGroupDetails.id;
-        const newGroup = await createChildGroup(parentIdFromSearch, groupName, attributes);
-        
+        const newGroup = await createChildGroup(
+          parentIdFromSearch,
+          groupName,
+          attributes
+        );
+
         console.log('Gruppe erfolgreich erstellt:', newGroup);
         navigate(`/group/${newGroup.id}`);
-        
       } else if (groupId) {
         await updateGroupName(groupId, groupName, attributes);
         console.log('Name erfolgreich geändert!');
@@ -339,10 +361,14 @@ export const EditGroupPage: React.FC = () => {
       {isNewGroup ? (
         <div className="new-group-placeholder">
           <div className="placeholder-content">
-            <h3>Berechtigungen zuweisen</h3>
-            <p>Bitte erstellen Sie zuerst die Gruppe, um Berechtigungen und Rollen per Drag & Drop zuzuweisen.</p>
+            <h3>Rollen zuweisen</h3>
+            <p>
+              Bitte erstellen Sie zuerst die Gruppe, um Rollen per Drag & Drop
+              zuzuweisen.
+            </p>
             <p style={{ fontSize: '0.9rem', color: '#666', marginTop: '10px' }}>
-               Wählen Sie oben eine Elterngruppe, geben Sie einen Namen ein und klicken Sie auf "Gruppe erstellen".
+              Wählen Sie oben eine Standard Gruppe, geben Sie einen Namen ein
+              und klicken Sie auf "Gruppe erstellen".
             </p>
           </div>
         </div>
