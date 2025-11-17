@@ -340,9 +340,9 @@ export const EditGroupPage: React.FC = () => {
         <div className="new-group-placeholder">
           <div className="placeholder-content">
             <h3>Berechtigungen zuweisen</h3>
-            <p>Bitte erstellen Sie zuerst die Gruppe, um Berechtigungen und Rollen per Drag & Drop zuzuweisen.</p>
+            <p>Bitte erstellen Sie zuerst die Gruppe, Rollen per Drag & Drop zuzuweisen.</p>
             <p style={{ fontSize: '0.9rem', color: '#666', marginTop: '10px' }}>
-               Wählen Sie oben eine Elterngruppe, geben Sie einen Namen ein und klicken Sie auf "Gruppe erstellen".
+               Wählen Sie oben eine Standard Gruppe, geben Sie einen Namen ein und klicken Sie auf "Gruppe erstellen".
             </p>
           </div>
         </div>
