@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
-import { Startseite } from './MainPage.tsx';
-import { EditGroupPage } from './group/EditGroup.tsx';
-import { GroupUserList } from './group-users/GroupUserList.tsx';
-=======
 import { BrowserRouter } from 'react-router';
 import RoutingComponent from '@components/RoutingComponent/RoutingComponent';
 import {
@@ -24,23 +17,11 @@ import GlobalControls from '@components/GlobalControls/GlobalControls';
 
 const joyTheme = createCustomJoyTheme();
 const muiTheme = createCustomMuiTheme();
->>>>>>> upstream/main
 
 type AppProps = {
   basename?: string;
 };
 
-<<<<<<< HEAD
-const App = (props: AppProps) => {
-  return (
-    <BrowserRouter basename={props.basename ?? '/'}>
-      <Routes>
-        <Route path="/" element={<Startseite />} />
-        <Route path="/group/:groupId" element={<EditGroupPage />} />
-        <Route path="/group-users/:groupId" element={<GroupUserList />} />
-      </Routes>
-    </BrowserRouter>
-=======
 /**
  * @param props - AppProps, contains customProps delivered from the rootUi (user is handled separately via useUser hook)
  */
@@ -78,8 +59,7 @@ function App(props: AppProps) {
         </JoyCssVarsProvider>
       </ThemeProvider>
     </Provider>
->>>>>>> upstream/main
   );
-};
+}
 
 export default App;

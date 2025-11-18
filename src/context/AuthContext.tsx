@@ -7,11 +7,7 @@ import React, {
   useState,
 } from 'react';
 import type { User } from 'oidc-client-ts';
-<<<<<<< HEAD
-import { AUTH_USER_CHANGED_EVENT } from '@constants/events';
-=======
 import { AUTH_USER_CHANGED_EVENT } from '@/constants/events';
->>>>>>> upstream/main
 
 type GetUserFn = () => User | null;
 
