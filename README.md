@@ -6,17 +6,6 @@ This project contains example use cases for all technologies listed below. (It i
 
 Execute the following commands when you clone the project for the first time:
 
-<<<<<<< HEAD
-Make sure to execute this inside a bash environment (GitBash on windows)
-
-```bash
-npm run init
-```
-
-and then this (no matter where):
-
-=======
->>>>>>> upstream/main
 ```bash
 npm i
 ```

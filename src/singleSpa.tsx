@@ -3,16 +3,6 @@ import ReactDOMClient from 'react-dom/client';
 import singleSpaReact from 'single-spa-react';
 import { cssLifecycleFactory } from 'vite-plugin-single-spa/ex';
 import type { User } from 'oidc-client-ts';
-<<<<<<< HEAD
-import { AuthProvider } from '@context/AuthContext';
-import type { AppProps } from 'single-spa';
-import App from './App';
-import './initApiBase';
-
-type RootProps = {
-  getUser?: () => User | null;
-
-=======
 import App from './App';
 import { AuthProvider } from '@/context/AuthContext';
 
@@ -20,7 +10,6 @@ import { AuthProvider } from '@/context/AuthContext';
 type RootProps = {
   getUser?: () => User | null;
   // Additional props from the root or runtime can be included here
->>>>>>> upstream/main
   [key: string]: unknown;
 };
 
@@ -52,21 +41,13 @@ export const bootstrap = [cssLc.bootstrap, lifecycle.bootstrap];
 
 export const mount = [
   cssLc.mount,
-<<<<<<< HEAD
-  async (props: AppProps) => {
-=======
   async (props: RootProps) => {
->>>>>>> upstream/main
     await lifecycle.mount(props);
   },
 ];
 
 export const unmount = [
-<<<<<<< HEAD
-  async (props: AppProps) => {
-=======
   async (props: RootProps) => {
->>>>>>> upstream/main
     await lifecycle.unmount(props);
   },
   cssLc.unmount,
